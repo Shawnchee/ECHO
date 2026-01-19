@@ -25,7 +25,7 @@ export default function Home() {
       <TerminalHeader />
 
       {/* Main Content */}
-      <main className="relative z-10 flex min-h-screen items-center justify-center px-6 pt-24 pb-12">
+      <main className="relative z-10 flex min-h-screen items-center justify-center px-6 pt-30 pb-24">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center w-full">
           
           {/* Left Column - Hero Content */}
