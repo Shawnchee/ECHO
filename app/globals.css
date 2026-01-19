@@ -1,32 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: oklch(0.145 0 0); /* deep neutral */
-  --border-strong: oklch(0.839 0.0187 78.23);
-  --border-low: oklch(0.927 0.0122 96.43);
-  --accent: oklch(0 0 0);
-  --muted: #3a3a3a; /* darker for better light-mode contrast */
-  --cream: oklch(0.9553 0.0029 84.56);
-  --card: #ffffff;
-  --card-foreground: oklch(0.145 0 0);
+  --background: #000000;
+  --foreground: #ffffff;
+  --border-strong: oklch(1 0 0 / 0.12);
+  --border-low: oklch(1 0 0 / 0.08);
+  --accent: #22c55e;
+  --muted: #6b7280;
+  --cream: oklch(0.22 0.009 70.82);
+  --card: #0a0a0a;
+  --card-foreground: #ffffff;
   --radius: 0.625rem;
-  --font-sans: var(--font-inter), system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --border-strong: oklch(1 0 0 / 0.12);
-    --border-low: oklch(1 0 0 / 0.08);
-    --accent: oklch(0.922 0 0);
-    --muted: oklch(0.75 0.01 260); /* brighten muted text in dark mode */
-    --cream: oklch(0.22 0.009 70.82);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-  }
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Droid Sans Mono', 'Source Code Pro', monospace;
 }
 
 @theme inline {
@@ -54,8 +40,42 @@
   }
 
   body {
-    @apply bg-bg1 text-foreground antialiased;
+    @apply bg-black text-foreground antialiased;
     font-family: var(--font-sans);
-    color-scheme: light dark;
+    color-scheme: dark;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0a0a0a;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #22c55e;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #16a34a;
+  }
+
+  /* Terminal text selection */
+  ::selection {
+    background-color: rgba(34, 197, 94, 0.3);
+    color: #ffffff;
+  }
+
+  /* Glow effects for terminal aesthetic */
+  .glow-green {
+    text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+  }
+
+  .glow-green-strong {
+    text-shadow: 0 0 20px rgba(34, 197, 94, 0.8);
   }
 }
