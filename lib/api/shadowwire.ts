@@ -7,6 +7,9 @@ import { ShadowWireClient } from "@radr/shadowwire";
 
 const shadowwire = new ShadowWireClient({ debug: true });
 
+// Valid token types for ShadowWire
+export type ShadowWireToken = "USDC" | "SOL" | "RADR" | "ORE" | "BONK" | "JIM" | "GODL" | "HUSTLE" | "ZEC" | "CRT" | "BLACKCOIN" | "GIL" | "ANON" | "WLFI" | "USD1" | "AOL" | "IQLABS";
+
 export interface ShadowWireBalance {
   available: number;
   poolAddress: string;
@@ -17,7 +20,7 @@ export interface ShadowWireBalance {
  */
 export async function getShadowWireBalance(
   address: string,
-  token: string = "SOL"
+  token: ShadowWireToken = "SOL"
 ): Promise<ShadowWireBalance> {
   try {
     const balance = await shadowwire.getBalance(address, token);
@@ -38,7 +41,7 @@ export async function makePrivateTransfer(params: {
   sender: string;
   recipient: string;
   amount: number;
-  token: string;
+  token: ShadowWireToken;
   signMessage: (message: Uint8Array) => Promise<Uint8Array>;
 }): Promise<{
   success: boolean;
@@ -75,7 +78,7 @@ export async function simulatePrivateTransfer(params: {
   sender: string;
   recipient: string;
   amount: number;
-  token: string;
+  token: ShadowWireToken;
 }): Promise<{
   possible: boolean;
   reason?: string;
