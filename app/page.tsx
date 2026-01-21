@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { TerminalHeader } from "@/components/terminal-header";
 import { GlobeBackground } from "@/components/globe-background";
@@ -8,12 +9,13 @@ import { WalletInput } from "@/components/wallet-input";
 import { Shield, Eye, Lock } from "lucide-react";
 
 export default function Home() {
+  const router = useRouter();
   const [selectedWallet, setSelectedWallet] = useState<string | null>(null);
 
   const handleAnalyze = (address: string) => {
     setSelectedWallet(address);
-    console.log("Analyzing wallet:", address);
-    // TODO: Navigate to analysis page
+    // Navigate to analysis page
+    router.push(`/analysis/${address}`);
   };
 
   return (
