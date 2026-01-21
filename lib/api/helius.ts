@@ -1,11 +1,11 @@
 /**
  * Helius API Client
  * Fetches transaction history, token balances, and program interactions
+ * Using direct API calls for compatibility
  */
 
-import { Helius } from "helius-sdk";
-
-const helius = new Helius(process.env.HELIUS_API_KEY || "");
+const HELIUS_API_KEY = process.env.HELIUS_API_KEY || "";
+const HELIUS_BASE_URL = `https://api-devnet.helius.xyz/v0`;
 
 export interface HeliusTransaction {
   signature: string;
@@ -36,59 +36,87 @@ export interface HeliusBalance {
 }
 
 /**
- * Fetch transaction history for a wallet
+ * Fetch transaction history for a wallet using enhanced transactions API
  */
 export async function getTransactionHistory(
   address: string,
   limit: number = 100
 ): Promise<HeliusTransaction[]> {
   try {
-    const transactions = await helius.rpc.getSignaturesForAddress({
-      address,
-      limit,
-    });
-
-    const detailedTxs = await Promise.all(
-      transactions.map(async (tx) => {
-        const parsed = await helius.rpc.getParsedTransaction(tx.signature);
-        return {
-          signature: tx.signature,
-          timestamp: tx.blockTime || 0,
-          type: parsed?.type || "unknown",
-          source: parsed?.source || "unknown",
-          fee: parsed?.fee || 0,
-          feePayer: parsed?.feePayer || address,
-          slot: tx.slot,
-          nativeTransfers: parsed?.nativeTransfers,
-          tokenTransfers: parsed?.tokenTransfers,
-        };
-      })
+    const response = await fetch(
+      `${HELIUS_BASE_URL}/addresses/${address}/transactions?api-key=${HELIUS_API_KEY}&limit=${limit}`
     );
 
-    return detailedTxs;
+    if (!response.ok) {
+      throw new Error(`Helius API error: ${response.status}`);
+    }
+
+    const transactions = await response.json();
+
+    return transactions.map((tx: any) => ({
+      signature: tx.signature || "",
+      timestamp: tx.timestamp || 0,
+      type: tx.type || "unknown",
+      source: tx.source || "unknown",
+      fee: tx.fee || 0,
+      feePayer: tx.feePayer || address,
+      slot: tx.slot || 0,
+      nativeTransfers: tx.nativeTransfers,
+      tokenTransfers: tx.tokenTransfers,
+    }));
   } catch (error) {
     console.error("Helius API error:", error);
-    throw new Error("Failed to fetch transaction history");
+    // Return empty array instead of throwing to allow graceful degradation
+    return [];
   }
 }
 
 /**
- * Get token balances for a wallet
+ * Get token balances for a wallet using DAS API
  */
 export async function getTokenBalances(
   address: string
 ): Promise<HeliusBalance[]> {
   try {
-    const balances = await helius.rpc.getTokenAccounts({
-      owner: address,
-    });
+    const response = await fetch(
+      `https://devnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          jsonrpc: "2.0",
+          id: "helius-token-balances",
+          method: "getAssetsByOwner",
+          params: {
+            ownerAddress: address,
+            page: 1,
+            limit: 100,
+            displayOptions: {
+              showFungible: true,
+            },
+          },
+        }),
+      }
+    );
 
-    return balances.map((balance) => ({
-      mint: balance.mint,
-      amount: balance.amount,
-      decimals: balance.decimals,
-      tokenAccount: balance.address,
-    }));
+    if (!response.ok) {
+      throw new Error(`Helius DAS API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (!data.result || !data.result.items) {
+      return [];
+    }
+
+    return data.result.items
+      .filter((item: any) => item.token_info)
+      .map((item: any) => ({
+        mint: item.id || "",
+        amount: item.token_info?.balance || 0,
+        decimals: item.token_info?.decimals || 0,
+        tokenAccount: item.token_info?.associated_token_address || "",
+      }));
   } catch (error) {
     console.error("Helius balance error:", error);
     return [];
