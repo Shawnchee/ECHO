@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Shield, 
@@ -13,10 +13,18 @@ import {
   ChevronDown,
   ChevronUp,
   Info,
-  Sparkles
+  Sparkles,
+  Download,
+  Play,
+  Map,
+  Trophy
 } from "lucide-react";
-import { generateMockGossipData } from "@/lib/mock-data";
 import type { WalletAnalysis } from "@/lib/privacy-engine";
+import { SimulationPanel } from "./simulation-panel";
+import { StealthDemo } from "./stealth-demo";
+import { ComplianceHeatmap } from "./compliance-heatmap";
+import { ExportPanel } from "./export-panel";
+import { GamificationBadges } from "./gamification-badges";
 
 interface AnalysisSidebarProps {
   address: string;
@@ -24,13 +32,13 @@ interface AnalysisSidebarProps {
 }
 
 export function AnalysisSidebar({ address, analysis }: AnalysisSidebarProps) {
-  const mockData = useMemo(() => generateMockGossipData(address), [address]);
   const [expandedRisk, setExpandedRisk] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<"overview" | "simulation" | "stealth" | "heatmap" | "export" | "badges">("overview");
 
-  // Use real data if available, fallback to mock
-  const privacyScore = analysis?.privacyScore ?? mockData.metrics.privacyScore;
-  const transactionCount = analysis?.transactionCount ?? mockData.metrics.transactionCount;
-  const uniqueInteractions = analysis?.uniqueInteractions ?? mockData.metrics.uniqueInteractions;
+  // Use real data only - no fallbacks
+  const privacyScore = analysis?.privacyScore ?? 0;
+  const transactionCount = analysis?.transactionCount ?? 0;
+  const uniqueInteractions = analysis?.uniqueInteractions ?? 0;
   const risks = analysis?.risks ?? [];
   const aiSummary = analysis?.aiSummary;
   const mevExposure = analysis?.mevExposure;
@@ -42,8 +50,48 @@ export function AnalysisSidebar({ address, analysis }: AnalysisSidebarProps) {
         ? "yellow"
         : "red";
 
+  // Tab buttons
+  const tabs = [
+    { id: "overview" as const, icon: Shield, label: "Overview" },
+    { id: "simulation" as const, icon: Play, label: "Simulate" },
+    { id: "stealth" as const, icon: Eye, label: "Stealth" },
+    { id: "heatmap" as const, icon: Map, label: "Heatmap" },
+    { id: "badges" as const, icon: Trophy, label: "Badges" },
+    { id: "export" as const, icon: Download, label: "Export" },
+  ];
+
   return (
-    <div className="h-full overflow-y-auto bg-black/40 backdrop-blur-sm border-2 border-green-500/20 rounded-2xl p-6 space-y-6 custom-scrollbar">
+    <div className="h-full flex flex-col bg-black/40 backdrop-blur-sm border-2 border-green-500/20 rounded-2xl overflow-hidden">
+      {/* Tab Navigation */}
+      <div className="flex border-b border-green-500/20 bg-black/60 overflow-x-auto">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`flex-1 min-w-[60px] px-2 py-3 text-xs font-mono transition-colors flex flex-col items-center gap-1 ${
+              activeTab === tab.id
+                ? "bg-green-500/20 text-green-400 border-b-2 border-green-400"
+                : "text-gray-500 hover:text-gray-300 hover:bg-white/5"
+            }`}
+          >
+            <tab.icon className="h-4 w-4" />
+            <span className="truncate">{tab.label}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Tab Content */}
+      <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
+        <AnimatePresence mode="wait">
+          {/* Overview Tab */}
+          {activeTab === "overview" && (
+            <motion.div
+              key="overview"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              className="space-y-6"
+            >
       {/* Privacy Score */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -291,7 +339,7 @@ export function AnalysisSidebar({ address, analysis }: AnalysisSidebarProps) {
         </ul>
       </motion.div>
 
-      {/* Badge/Gamification */}
+      {/* Badge/Gamification Preview */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -301,7 +349,77 @@ export function AnalysisSidebar({ address, analysis }: AnalysisSidebarProps) {
         <div className="text-4xl mb-2">🕵️</div>
         <div className="text-sm font-mono text-green-400 font-bold">Shadow Operator</div>
         <div className="text-xs text-gray-500 mt-1">Good privacy practices detected</div>
+        <button 
+          onClick={() => setActiveTab("badges")}
+          className="mt-2 text-xs text-green-400 hover:text-green-300 font-mono"
+        >
+          View All Badges →
+        </button>
       </motion.div>
+            </motion.div>
+          )}
+
+          {/* Simulation Tab */}
+          {activeTab === "simulation" && (
+            <motion.div
+              key="simulation"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+            >
+              <SimulationPanel analysis={analysis ?? null} />
+            </motion.div>
+          )}
+
+          {/* Stealth Tab */}
+          {activeTab === "stealth" && (
+            <motion.div
+              key="stealth"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+            >
+              <StealthDemo walletAddress={address} />
+            </motion.div>
+          )}
+
+          {/* Heatmap Tab */}
+          {activeTab === "heatmap" && (
+            <motion.div
+              key="heatmap"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+            >
+              <ComplianceHeatmap analysis={analysis ?? null} />
+            </motion.div>
+          )}
+
+          {/* Badges Tab */}
+          {activeTab === "badges" && (
+            <motion.div
+              key="badges"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+            >
+              <GamificationBadges analysis={analysis ?? null} />
+            </motion.div>
+          )}
+
+          {/* Export Tab */}
+          {activeTab === "export" && (
+            <motion.div
+              key="export"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+            >
+              <ExportPanel analysis={analysis ?? null} address={address} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }
