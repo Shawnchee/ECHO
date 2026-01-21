@@ -26,6 +26,8 @@ export default function AnalysisPage({ params }: AnalysisPageProps) {
         setLoading(true);
         setError(null);
 
+        console.log("📡 Fetching analysis for address:", address);
+
         const response = await fetch("/api/analyze", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -38,6 +40,15 @@ export default function AnalysisPage({ params }: AnalysisPageProps) {
         }
 
         const data = await response.json();
+        console.log("📊 Analysis data received:", {
+          address: data.address,
+          privacyScore: data.privacyScore,
+          transactionCount: data.transactionCount,
+          uniqueInteractions: data.uniqueInteractions,
+          risksCount: data.risks?.length,
+          pathsCount: data.deanonymizationPaths?.length,
+          paths: data.deanonymizationPaths,
+        });
         setAnalysis(data);
       } catch (err: any) {
         console.error("Analysis error:", err);
