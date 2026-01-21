@@ -4,7 +4,6 @@ import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { ArrowLeft, Loader2 } from "lucide-react";
-import { TerminalHeader } from "@/components/terminal-header";
 import { GossipGraph } from "@/components/gossip-graph";
 import { AnalysisSidebar } from "@/components/analysis-sidebar";
 import { Button } from "@/components/ui/button";
@@ -53,11 +52,8 @@ export default function AnalysisPage({ params }: AnalysisPageProps) {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-black text-white">
-      {/* Terminal Header */}
-      <TerminalHeader />
-
       {/* Back Button */}
-      <div className="fixed top-20 left-6 z-50">
+      <div className="fixed top-6 left-6 z-50">
         <Button
           onClick={() => router.push("/")}
           variant="outline"
