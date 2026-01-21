@@ -19,9 +19,11 @@ import { nodeTypes } from "./graph-nodes";
 import { generateMockGossipData, GossipNode as DataNode } from "@/lib/mock-data";
 import { ZoomIn, ZoomOut, Maximize2, Eye, EyeOff } from "lucide-react";
 import { Button } from "./ui/button";
+import type { WalletAnalysis } from "@/lib/privacy-engine";
 
 interface GossipGraphProps {
   address: string;
+  analysis?: WalletAnalysis | null;
 }
 
 // Convert mock data to React Flow format
@@ -86,7 +88,7 @@ function convertToReactFlowFormat(data: ReturnType<typeof generateMockGossipData
   return { nodes, edges };
 }
 
-export function GossipGraph({ address }: GossipGraphProps) {
+export function GossipGraph({ address, analysis }: GossipGraphProps) {
   const mockData = useMemo(() => generateMockGossipData(address), [address]);
   const { nodes: initialNodes, edges: initialEdges } = useMemo(
     () => convertToReactFlowFormat(mockData),
