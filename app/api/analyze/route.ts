@@ -26,8 +26,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Run privacy analysis
-    console.log(`Analyzing wallet: ${address}`);
+    console.log(`📡 Analyzing wallet: ${address}`);
     const analysis = await analyzeWalletPrivacy(address);
+    
+    console.log(`✅ Analysis complete:`, {
+      transactionCount: analysis.transactionCount,
+      uniqueInteractions: analysis.uniqueInteractions,
+      risksCount: analysis.risks.length,
+      pathsCount: analysis.deanonymizationPaths.length,
+    });
 
     return NextResponse.json(analysis);
   } catch (error: any) {

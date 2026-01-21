@@ -43,15 +43,19 @@ export async function getTransactionHistory(
   limit: number = 100
 ): Promise<HeliusTransaction[]> {
   try {
+    console.log(`📡 Fetching transactions for ${address.slice(0, 8)}... from Helius`);
+    
     const response = await fetch(
       `${HELIUS_BASE_URL}/addresses/${address}/transactions?api-key=${HELIUS_API_KEY}&limit=${limit}`
     );
 
     if (!response.ok) {
+      console.error(`❌ Helius API error: ${response.status}`);
       throw new Error(`Helius API error: ${response.status}`);
     }
 
     const transactions = await response.json();
+    console.log(`✅ Helius returned ${transactions.length} transactions`);
 
     return transactions.map((tx: any) => ({
       signature: tx.signature || "",
@@ -133,6 +137,8 @@ export async function getConnectedAddresses(
   const transactions = await getTransactionHistory(address, limit);
   const addresses = new Set<string>();
 
+  console.log(`🔗 Processing ${transactions.length} transactions for connected addresses`);
+
   transactions.forEach((tx) => {
     tx.nativeTransfers?.forEach((transfer) => {
       if (transfer.fromUserAccount !== address) {
@@ -152,6 +158,8 @@ export async function getConnectedAddresses(
       }
     });
   });
+
+  console.log(`✅ Found ${addresses.size} connected addresses`);
 
   return addresses;
 }
