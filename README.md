@@ -2,7 +2,7 @@
 
 > **Making Blockchain Privacy Risks Visible and Actionable**
 
-[![Solana Privacy Hackathon | Track 02: Privacy Tooling](https://img.shields.io/badge/Hackathon-Track%2002%20Privacy%20Tooling-blue?style=for-the-badge)](https://colosseum.org)
+[![Solana Privacy Hackathon | Track 02: Privacy Tooling](https://img.shields.io/badge/Hackathon-Track%2002%20Privacy%20Tooling-blue?style=for-the-badge)](https://Solana Privacy Hackathon.org)
 [![Next.js](https://img.shields.io/badge/Next.js-16.0-black?style=flat-square&logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)](https://typescriptlang.org)
 [![Solana](https://img.shields.io/badge/Solana-Devnet-14F195?style=flat-square&logo=solana)](https://solana.com)
@@ -773,7 +773,7 @@ Built with support from hackathon sponsors:
 | **Google Gemini** | AI-powered privacy explanations |
 | **Radr Labs** | ShadowWire stealth transfer SDK |
 
-Special thanks to **Colosseum** for organizing this hackathon.
+Special thanks to **Solana Privacy Hackathon** for organizing this hackathon.
 
 ---
 
