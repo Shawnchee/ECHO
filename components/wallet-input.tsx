@@ -120,7 +120,7 @@ export function WalletInput({ onAnalyze }: WalletInputProps) {
         size="lg"
         onClick={handleAnalyze}
         disabled={!isValid || isValidating}
-        className="w-full group"
+        className="w-full group cursor-pointer"
       >
         <Sparkles className="h-5 w-5 group-hover:rotate-12 transition-transform" />
         Analyze Privacy
