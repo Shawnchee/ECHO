@@ -73,7 +73,7 @@ export function WalletInput({ onAnalyze }: WalletInputProps) {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
               >
-                <Loader2 className="h-5 w-5 animate-spin text-green-500" />
+                <Loader2 className="h-5 w-5 animate-spin text-blue-500" />
               </motion.div>
             )}
             {!isValidating && isValid && (
@@ -83,7 +83,7 @@ export function WalletInput({ onAnalyze }: WalletInputProps) {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
               >
-                <CheckCircle2 className="h-5 w-5 text-green-500" />
+                <CheckCircle2 className="h-5 w-5 text-blue-500" />
               </motion.div>
             )}
             {!isValidating && error && (
@@ -131,11 +131,11 @@ export function WalletInput({ onAnalyze }: WalletInputProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
-        className="text-xs text-muted/70 font-mono space-y-1"
+        className="text-xs font-mono space-y-1 text-white/50"
       >
         <p>→ Devnet addresses only</p>
         <p>→ Example: 8xR7d...g3Ks</p>
-        <p className="text-green-500/50">→ Privacy analysis powered by ECHO</p>
+        <p className="text-blue-500/50">→ Privacy analysis powered by ECHO</p>
       </motion.div>
     </div>
   );

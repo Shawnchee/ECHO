@@ -13,7 +13,7 @@ const buttonVariants = cva(
           "border-2 border-foreground/20 bg-transparent hover:bg-foreground/10 hover:border-foreground/40",
         ghost: "hover:bg-foreground/10",
         terminal:
-          "bg-transparent border-2 border-green-500 text-green-500 hover:bg-green-500/10 font-mono uppercase tracking-wider shadow-[0_0_20px_rgba(34,197,94,0.3)] hover:shadow-[0_0_30px_rgba(34,197,94,0.5)] transition-all",
+          "bg-transparent border-2 border-blue-500 text-blue-500 hover:bg-blue-500/10 font-mono uppercase tracking-wider shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] transition-all",
       },
       size: {
         default: "h-10 px-4 py-2",

@@ -68,7 +68,7 @@ export default function AnalysisPage({ params }: AnalysisPageProps) {
         <Button
           onClick={() => router.push("/")}
           variant="outline"
-          className="bg-black/80 backdrop-blur-sm border-green-500/30 text-green-400 hover:bg-green-500/10 hover:text-green-300"
+          className="bg-black/80 backdrop-blur-sm border-blue-500/30 text-blue-400 hover:bg-blue-500/10 hover:text-blue-300"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Search
@@ -79,9 +79,9 @@ export default function AnalysisPage({ params }: AnalysisPageProps) {
       {loading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
           <div className="text-center space-y-4">
-            <Loader2 className="h-16 w-16 animate-spin text-green-400 mx-auto" />
+            <Loader2 className="h-16 w-16 animate-spin text-blue-400 mx-auto" />
             <div className="space-y-2">
-              <p className="text-xl font-mono text-green-400">Analyzing wallet...</p>
+              <p className="text-xl font-mono text-blue-400">Analyzing wallet...</p>
               <div className="text-sm font-mono text-gray-400 space-y-1">
                 <p>▸ Fetching transactions from Helius...</p>
                 <p>▸ Detecting deanonymization risks...</p>
@@ -127,10 +127,10 @@ export default function AnalysisPage({ params }: AnalysisPageProps) {
               <div className="flex items-start justify-between">
                 <div>
                   <h1 className="text-3xl font-bold mb-2 font-mono">
-                    <span className="text-green-400">$</span> Wallet Analysis Complete
+                    <span className="text-blue-400">$</span> Wallet Analysis Complete
                   </h1>
                   <div className="flex items-center gap-3">
-                    <code className="px-3 py-1.5 bg-green-500/10 border border-green-500/30 rounded-md text-sm text-green-400 font-mono">
+                    <code className="px-3 py-1.5 bg-blue-500/10 border border-blue-500/30 rounded-md text-sm text-blue-400 font-mono">
                       {address}
                     </code>
                     <span className="px-2 py-1 bg-yellow-500/10 border border-yellow-500/30 rounded text-xs text-yellow-400 font-mono uppercase">
@@ -141,8 +141,8 @@ export default function AnalysisPage({ params }: AnalysisPageProps) {
 
                 {/* Quick Stats - Real Data */}
                 <div className="flex gap-4">
-                  <div className="px-4 py-2 bg-black/60 border border-green-500/20 rounded-lg text-center">
-                    <div className="text-2xl font-bold text-green-400 font-mono">
+                  <div className="px-4 py-2 bg-black/60 border border-blue-500/20 rounded-lg text-center">
+                    <div className="text-2xl font-bold text-blue-400 font-mono">
                       {analysis.privacyScore}
                     </div>
                     <div className="text-xs text-gray-400 font-mono">Privacy Score</div>
@@ -170,7 +170,7 @@ export default function AnalysisPage({ params }: AnalysisPageProps) {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="relative h-[calc(100vh-280px)] min-h-[600px] rounded-2xl border-2 border-green-500/20 bg-black/40 backdrop-blur-sm overflow-hidden"
+                className="relative h-[calc(100vh-280px)] min-h-[600px] rounded-2xl border-2 border-blue-500/20 bg-black/40 backdrop-blur-sm overflow-hidden"
               >
                 <GossipGraph address={address} analysis={analysis} />
               </motion.div>

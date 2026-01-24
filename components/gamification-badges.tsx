@@ -207,7 +207,7 @@ export function GamificationBadges({ analysis }: GamificationBadgesProps) {
       {/* Earned Badges */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-mono text-green-400">
+          <h3 className="text-sm font-mono text-blue-400">
             🏆 Earned Badges ({earnedBadges.length})
           </h3>
         </div>
@@ -236,10 +236,10 @@ export function GamificationBadges({ analysis }: GamificationBadgesProps) {
               </div>
               
               {/* Tooltip */}
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-black/95 rounded-lg border border-green-500/30 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-black/95 rounded-lg border border-blue-500/30 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
                 <p className="text-xs text-white font-bold">{badge.name}</p>
                 <p className="text-xs text-gray-400 mt-1">{badge.description}</p>
-                <p className="text-xs text-green-400 mt-1 font-mono">{badge.condition}</p>
+                <p className="text-xs text-blue-400 mt-1 font-mono">{badge.condition}</p>
               </div>
             </motion.div>
           ))}
@@ -281,7 +281,7 @@ export function GamificationBadges({ analysis }: GamificationBadgesProps) {
 
       {/* Featured Badge */}
       {earnedBadges.length > 0 && (
-        <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-xl p-4 border border-green-500/30">
+        <div className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-xl p-4 border border-blue-500/30">
           <div className="flex items-center gap-4">
             <div className="text-4xl">
               {earnedBadges.find(b => b.rarity === 'legendary')?.emoji ||
@@ -299,7 +299,7 @@ export function GamificationBadges({ analysis }: GamificationBadgesProps) {
                  earnedBadges.find(b => b.rarity === 'epic')?.description ||
                  earnedBadges[0].description}
               </div>
-              <div className="text-xs text-green-400 mt-1 font-mono">
+              <div className="text-xs text-blue-400 mt-1 font-mono">
                 Featured Achievement
               </div>
             </div>

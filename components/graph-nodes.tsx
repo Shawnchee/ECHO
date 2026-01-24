@@ -76,13 +76,13 @@ export const WalletNode = memo(({ data }: NodeProps) => {
       transition={{ duration: 0.3 }}
       className="relative"
     >
-      <Handle type="target" position={Position.Top} className="!bg-green-500/50 !border-green-500" />
+      <Handle type="target" position={Position.Top} className="!bg-blue-500/50 !border-blue-500" />
       
       <div className={`
         min-w-[180px] px-4 py-3 rounded-xl border-2 backdrop-blur-sm
         bg-black/80 shadow-lg transition-all duration-200
         hover:scale-105 hover:shadow-xl cursor-pointer
-        ${data.isMain ? 'border-green-500 shadow-green-500/30' : 'border-green-500/30'}
+        ${data.isMain ? 'border-blue-500 shadow-blue-500/30' : 'border-blue-500/30'}
       `}>
         <div className="flex items-start gap-3">
           <div className={`
@@ -134,7 +134,7 @@ export const WalletNode = memo(({ data }: NodeProps) => {
             {data.balance !== undefined && (
               <div className="mt-2 flex items-center justify-between">
                 <span className="text-xs text-gray-500 font-mono">Balance:</span>
-                <span className="text-xs text-green-400 font-mono font-bold">
+                <span className="text-xs text-blue-400 font-mono font-bold">
                   {data.balance.toFixed(2)} SOL
                 </span>
               </div>
@@ -156,7 +156,7 @@ export const WalletNode = memo(({ data }: NodeProps) => {
         </div>
       </div>
       
-      <Handle type="source" position={Position.Bottom} className="!bg-green-500/50 !border-green-500" />
+      <Handle type="source" position={Position.Bottom} className="!bg-blue-500/50 !border-blue-500" />
     </motion.div>
   );
 });

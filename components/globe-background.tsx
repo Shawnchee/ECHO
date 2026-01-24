@@ -54,7 +54,7 @@ export function GlobeBackground() {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(34, 197, 94, 0.3)";
+        ctx.fillStyle = "rgba(59, 130, 246, 0.3)";
         ctx.fill();
       });
 
@@ -69,7 +69,7 @@ export function GlobeBackground() {
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(34, 197, 94, ${0.2 * (1 - dist / 150)})`;
+            ctx.strokeStyle = `rgba(59, 130, 246, ${0.2 * (1 - dist / 150)})`;
             ctx.lineWidth = 1;
             ctx.stroke();
           }

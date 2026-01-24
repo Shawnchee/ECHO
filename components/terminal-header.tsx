@@ -35,7 +35,7 @@ export function TerminalHeader() {
   }, [currentChar, currentLine, displayedLines]);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-sm border-b border-green-500/20 px-6 py-3">
+    <div className="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-sm border-b border-blue-500/20 px-6 py-3">
       <div className="max-w-7xl mx-auto font-mono text-sm">
         {displayedLines.map((line, i) => (
           <motion.div
@@ -44,15 +44,15 @@ export function TerminalHeader() {
             animate={{ opacity: 1, x: 0 }}
             className={
               line.startsWith("$")
-                ? "text-green-400"
-                : "text-green-500/70"
+                ? "text-blue-400"
+                : "text-blue-500/70"
             }
           >
             {line}
           </motion.div>
         ))}
         {currentLine < commands.length && (
-          <div className="text-green-400">
+          <div className="text-blue-400">
             {commands[currentLine].slice(0, currentChar)}
             <span className="animate-pulse">_</span>
           </div>

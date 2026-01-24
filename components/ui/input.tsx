@@ -18,7 +18,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           "font-mono tracking-wide",
           error
             ? "border-red-500 focus-visible:ring-red-500"
-            : "border-foreground/20 focus-visible:border-green-500 focus-visible:ring-green-500",
+            : "border-foreground/20 focus-visible:border-blue-500 focus-visible:ring-blue-500",
           className
         )}
         ref={ref}

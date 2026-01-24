@@ -234,41 +234,41 @@ export function GossipGraph({ address, analysis }: GossipGraphProps) {
         minZoom={0.1}
         maxZoom={2}
       >
-        <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="#10b981" className="opacity-20" />
-        <Controls className="!bg-black/80 !border-green-500/30 [&>button]:!bg-black/60 [&>button]:!border-green-500/30 [&>button]:!text-green-400 [&>button:hover]:!bg-green-500/20" />
+        <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="#3b82f6" className="opacity-20" />
+        <Controls className="!bg-black/80 !border-blue-500/30 [&>button]:!bg-black/60 [&>button]:!border-blue-500/30 [&>button]:!text-blue-400 [&>button:hover]:!bg-blue-500/20" />
 
         <Panel position="top-right" className="space-y-2">
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }}>
-            <Button onClick={toggleRiskPaths} size="sm" variant="outline" className="bg-black/80 backdrop-blur-sm border-green-500/30 text-green-400 hover:bg-green-500/10 font-mono text-xs">
+            <Button onClick={toggleRiskPaths} size="sm" variant="outline" className="bg-black/80 backdrop-blur-sm border-blue-500/30 text-blue-400 hover:bg-blue-500/10 font-mono text-xs">
               {showRiskPaths ? <><Eye className="h-3 w-3 mr-1" />Hide Risk Paths</> : <><EyeOff className="h-3 w-3 mr-1" />Show Risk Paths</>}
             </Button>
           </motion.div>
         </Panel>
 
         <Panel position="top-center">
-          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1 }} className="bg-black/60 backdrop-blur-sm border border-green-500/20 rounded-lg px-3 py-1.5">
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1 }} className="bg-black/60 backdrop-blur-sm border border-blue-500/20 rounded-lg px-3 py-1.5">
             <span className="text-xs text-gray-400 font-mono">💡 Click any node for details</span>
           </motion.div>
         </Panel>
 
-        <Panel position="bottom-left" className="!bg-black/80 !backdrop-blur-sm !border !border-green-500/20 !rounded-lg !p-3">
+        <Panel position="bottom-left" className="!bg-black/80 !backdrop-blur-sm !border !border-blue-500/20 !rounded-lg !p-3">
           <div className="space-y-2">
-            <div className="text-xs font-mono text-green-400 font-bold mb-2">Legend</div>
-            <div className="flex items-center gap-2"><div className="h-3 w-3 rounded-full bg-green-500"></div><span className="text-xs text-gray-400 font-mono">Wallet</span></div>
+            <div className="text-xs font-mono text-blue-400 font-bold mb-2">Legend</div>
+            <div className="flex items-center gap-2"><div className="h-3 w-3 rounded-full bg-blue-500"></div><span className="text-xs text-gray-400 font-mono">Wallet</span></div>
             <div className="flex items-center gap-2"><div className="h-3 w-3 rounded-full bg-orange-500"></div><span className="text-xs text-gray-400 font-mono">Exchange</span></div>
-            <div className="flex items-center gap-2"><div className="h-3 w-3 rounded-full bg-blue-500"></div><span className="text-xs text-gray-400 font-mono">Program</span></div>
+            <div className="flex items-center gap-2"><div className="h-3 w-3 rounded-full bg-purple-500"></div><span className="text-xs text-gray-400 font-mono">Program</span></div>
             <div className="flex items-center gap-2"><div className="h-3 w-3 rounded-full bg-red-500"></div><span className="text-xs text-gray-400 font-mono">MEV Bot</span></div>
-            <div className="flex items-center gap-2"><div className="h-3 w-3 rounded-full bg-emerald-500"></div><span className="text-xs text-gray-400 font-mono">Stealth</span></div>
-            <div className="border-t border-green-500/20 my-2"></div>
+            <div className="flex items-center gap-2"><div className="h-3 w-3 rounded-full bg-cyan-500"></div><span className="text-xs text-gray-400 font-mono">Stealth</span></div>
+            <div className="border-t border-blue-500/20 my-2"></div>
             <div className="flex items-center gap-2"><div className="h-0.5 w-6 bg-green-500"></div><span className="text-xs text-gray-400 font-mono">Low Risk</span></div>
             <div className="flex items-center gap-2"><div className="h-0.5 w-6 bg-yellow-500"></div><span className="text-xs text-gray-400 font-mono">Medium Risk</span></div>
             <div className="flex items-center gap-2"><div className="h-0.5 w-6 bg-red-500"></div><span className="text-xs text-gray-400 font-mono">High Risk</span></div>
           </div>
         </Panel>
 
-        <Panel position="bottom-right" className="!bg-black/80 !backdrop-blur-sm !border !border-green-500/20 !rounded-lg !p-3">
+        <Panel position="bottom-right" className="!bg-black/80 !backdrop-blur-sm !border !border-blue-500/20 !rounded-lg !p-3">
           <div className="space-y-1">
-            <div className="text-xs font-mono text-green-400 font-bold mb-2">Graph Stats</div>
+            <div className="text-xs font-mono text-blue-400 font-bold mb-2">Graph Stats</div>
             <div className="flex justify-between gap-4"><span className="text-xs text-gray-400 font-mono">Nodes:</span><span className="text-xs text-white font-mono font-bold">{nodes.length}</span></div>
             <div className="flex justify-between gap-4"><span className="text-xs text-gray-400 font-mono">Edges:</span><span className="text-xs text-white font-mono font-bold">{edges.length}</span></div>
           </div>

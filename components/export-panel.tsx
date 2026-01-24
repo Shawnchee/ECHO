@@ -127,12 +127,12 @@ ${analysis.temporalAnalysis.commonHours.length > 0
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-black/40 backdrop-blur-sm border border-green-500/20 rounded-xl p-4 space-y-4"
+      className="bg-black/40 backdrop-blur-sm border border-blue-500/20 rounded-xl p-4 space-y-4"
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Download className="h-4 w-4 text-green-400" />
-          <span className="text-sm font-mono text-green-400">Export Analysis</span>
+          <Download className="h-4 w-4 text-blue-400" />
+          <span className="text-sm font-mono text-blue-400">Export Analysis</span>
         </div>
         <div className="flex items-center gap-1 text-xs text-gray-500">
           <Clock className="h-3 w-3" />
@@ -146,7 +146,7 @@ ${analysis.temporalAnalysis.commonHours.length > 0
           onClick={() => setExportFormat("json")}
           className={`flex-1 p-2 rounded-lg border flex items-center justify-center gap-2 transition-colors ${
             exportFormat === "json"
-              ? "bg-green-500/20 border-green-500/50 text-green-400"
+              ? "bg-blue-500/20 border-blue-500/50 text-blue-400"
               : "bg-black/40 border-gray-700 text-gray-400 hover:border-gray-600"
           }`}
         >
@@ -157,7 +157,7 @@ ${analysis.temporalAnalysis.commonHours.length > 0
           onClick={() => setExportFormat("summary")}
           className={`flex-1 p-2 rounded-lg border flex items-center justify-center gap-2 transition-colors ${
             exportFormat === "summary"
-              ? "bg-green-500/20 border-green-500/50 text-green-400"
+              ? "bg-blue-500/20 border-blue-500/50 text-blue-400"
               : "bg-black/40 border-gray-700 text-gray-400 hover:border-gray-600"
           }`}
         >
@@ -182,7 +182,7 @@ ${analysis.temporalAnalysis.commonHours.length > 0
           onClick={copyToClipboard}
           variant="outline"
           size="sm"
-          className="flex-1 border-green-500/30 text-green-400 hover:bg-green-500/10"
+          className="flex-1 border-blue-500/30 text-blue-400 hover:bg-blue-500/10"
         >
           {copied ? (
             <>
@@ -199,7 +199,7 @@ ${analysis.temporalAnalysis.commonHours.length > 0
         <Button
           onClick={downloadFile}
           size="sm"
-          className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+          className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
         >
           <Download className="h-3 w-3 mr-1" />
           Download

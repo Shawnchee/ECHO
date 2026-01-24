@@ -17,7 +17,8 @@ import {
   Download,
   Play,
   Map,
-  Trophy
+  Trophy,
+  Terminal
 } from "lucide-react";
 import type { WalletAnalysis } from "@/lib/privacy-engine";
 import { SimulationPanel } from "./simulation-panel";
@@ -33,7 +34,7 @@ interface AnalysisSidebarProps {
 
 export function AnalysisSidebar({ address, analysis }: AnalysisSidebarProps) {
   const [expandedRisk, setExpandedRisk] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<"overview" | "simulation" | "stealth" | "heatmap" | "export" | "badges">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "simulation" | "stealth" | "heatmap" | "export" | "badges" | "logs">("overview");
 
   // Use real data only - no fallbacks
   const privacyScore = analysis?.privacyScore ?? 0;
@@ -57,20 +58,21 @@ export function AnalysisSidebar({ address, analysis }: AnalysisSidebarProps) {
     { id: "stealth" as const, icon: Eye, label: "Stealth" },
     { id: "heatmap" as const, icon: Map, label: "Heatmap" },
     { id: "badges" as const, icon: Trophy, label: "Badges" },
+    { id: "logs" as const, icon: Terminal, label: "API Logs" },
     { id: "export" as const, icon: Download, label: "Export" },
   ];
 
   return (
-    <div className="h-full flex flex-col bg-black/40 backdrop-blur-sm border-2 border-green-500/20 rounded-2xl overflow-hidden">
+    <div className="h-full flex flex-col bg-black/40 backdrop-blur-sm border-2 border-blue-500/20 rounded-2xl overflow-hidden">
       {/* Tab Navigation */}
-      <div className="flex border-b border-green-500/20 bg-black/60 overflow-x-auto">
+      <div className="flex border-b border-blue-500/20 bg-black/60 overflow-x-auto">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`flex-1 min-w-[60px] px-2 py-3 text-xs font-mono transition-colors flex flex-col items-center gap-1 ${
               activeTab === tab.id
-                ? "bg-green-500/20 text-green-400 border-b-2 border-green-400"
+                ? "bg-blue-500/20 text-blue-400 border-b-2 border-blue-400"
                 : "text-gray-500 hover:text-gray-300 hover:bg-white/5"
             }`}
           >
@@ -165,9 +167,9 @@ export function AnalysisSidebar({ address, analysis }: AnalysisSidebarProps) {
         transition={{ delay: 0.3 }}
         className="grid grid-cols-2 gap-3"
       >
-        <div className="bg-green-500/5 border border-green-500/20 rounded-lg p-3">
+        <div className="bg-blue-500/5 border border-blue-500/20 rounded-lg p-3">
           <div className="text-xs text-gray-400 font-mono mb-1">Transactions</div>
-          <div className="text-2xl font-bold text-green-400 font-mono">
+          <div className="text-2xl font-bold text-blue-400 font-mono">
             {transactionCount}
           </div>
         </div>
@@ -208,7 +210,7 @@ export function AnalysisSidebar({ address, analysis }: AnalysisSidebarProps) {
         
         <div className="space-y-2">
           {risks.length === 0 ? (
-            <div className="text-sm text-gray-500 font-mono p-3 bg-green-500/5 border border-green-500/20 rounded-lg">
+            <div className="text-sm text-gray-500 font-mono p-3 bg-blue-500/5 border border-blue-500/20 rounded-lg">
               ✅ No significant risks detected
             </div>
           ) : (
@@ -284,7 +286,7 @@ export function AnalysisSidebar({ address, analysis }: AnalysisSidebarProps) {
                           
                           {risk.recommendation && (
                             <div className="pt-2 border-t border-white/10">
-                              <p className="text-xs text-green-400">
+                              <p className="text-xs text-blue-400">
                                 💡 {risk.recommendation}
                               </p>
                             </div>
@@ -312,28 +314,28 @@ export function AnalysisSidebar({ address, analysis }: AnalysisSidebarProps) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
-        className="bg-green-500/5 border border-green-500/20 rounded-lg p-4 space-y-3"
+        className="bg-blue-500/5 border border-blue-500/20 rounded-lg p-4 space-y-3"
       >
-        <h3 className="text-sm font-mono text-green-400 uppercase tracking-wider flex items-center gap-2">
+        <h3 className="text-sm font-mono text-blue-400 uppercase tracking-wider flex items-center gap-2">
           <Lock className="h-4 w-4" />
           Privacy Tips
         </h3>
         
         <ul className="space-y-2 text-xs text-gray-300">
           <li className="flex items-start gap-2">
-            <span className="text-green-500 mt-0.5">•</span>
+            <span className="text-blue-500 mt-0.5">•</span>
             <span>Use multiple wallets to separate activities</span>
           </li>
           <li className="flex items-start gap-2">
-            <span className="text-green-500 mt-0.5">•</span>
+            <span className="text-blue-500 mt-0.5">•</span>
             <span>Avoid regular transaction patterns</span>
           </li>
           <li className="flex items-start gap-2">
-            <span className="text-green-500 mt-0.5">•</span>
+            <span className="text-blue-500 mt-0.5">•</span>
             <span>Consider using privacy-preserving protocols</span>
           </li>
           <li className="flex items-start gap-2">
-            <span className="text-green-500 mt-0.5">•</span>
+            <span className="text-blue-500 mt-0.5">•</span>
             <span>Batch transactions to reduce correlation</span>
           </li>
         </ul>
@@ -344,14 +346,14 @@ export function AnalysisSidebar({ address, analysis }: AnalysisSidebarProps) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
-        className="text-center py-4 border border-green-500/20 rounded-lg bg-black/40"
+        className="text-center py-4 border border-blue-500/20 rounded-lg bg-black/40"
       >
         <div className="text-4xl mb-2">🕵️</div>
-        <div className="text-sm font-mono text-green-400 font-bold">Shadow Operator</div>
+        <div className="text-sm font-mono text-blue-400 font-bold">Shadow Operator</div>
         <div className="text-xs text-gray-500 mt-1">Good privacy practices detected</div>
         <button 
           onClick={() => setActiveTab("badges")}
-          className="mt-2 text-xs text-green-400 hover:text-green-300 font-mono"
+          className="mt-2 text-xs text-blue-400 hover:text-blue-300 font-mono"
         >
           View All Badges →
         </button>
@@ -404,6 +406,176 @@ export function AnalysisSidebar({ address, analysis }: AnalysisSidebarProps) {
               exit={{ opacity: 0, x: 20 }}
             >
               <GamificationBadges analysis={analysis ?? null} />
+            </motion.div>
+          )}
+
+          {/* API Logs Tab - Transparency for users */}
+          {activeTab === "logs" && (
+            <motion.div
+              key="logs"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              className="space-y-4"
+            >
+              <div className="bg-blue-500/5 border border-blue-500/20 rounded-lg p-4 space-y-2">
+                <h3 className="text-sm font-mono text-blue-400 uppercase tracking-wider flex items-center gap-2">
+                  <Terminal className="h-4 w-4" />
+                  API Data Transparency
+                </h3>
+                <p className="text-xs text-gray-400">
+                  See exactly what data was fetched for your analysis. We believe in full transparency.
+                </p>
+              </div>
+
+              {/* Helius Data */}
+              <div className="bg-black/60 border border-gray-700 rounded-lg overflow-hidden">
+                <div className="px-3 py-2 bg-purple-500/10 border-b border-gray-700 flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-purple-400"></div>
+                  <span className="text-xs font-mono text-purple-400">Helius API</span>
+                </div>
+                <div className="p-3 space-y-2 text-xs font-mono">
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Transactions fetched:</span>
+                    <span className="text-white">{analysis?.transactionCount ?? 0}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Unique addresses:</span>
+                    <span className="text-white">{analysis?.uniqueInteractions ?? 0}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Network:</span>
+                    <span className="text-yellow-400">Devnet</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Range Protocol Data */}
+              <div className="bg-black/60 border border-gray-700 rounded-lg overflow-hidden">
+                <div className="px-3 py-2 bg-cyan-500/10 border-b border-gray-700 flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-cyan-400"></div>
+                  <span className="text-xs font-mono text-cyan-400">Range Protocol</span>
+                </div>
+                <div className="p-3 space-y-2 text-xs font-mono">
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Risk Score:</span>
+                    <span className="text-white">{analysis?.rangeRiskScore?.riskScore ?? 'N/A'}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Sanctions Check:</span>
+                    <span className={analysis?.rangeRiskScore?.isSanctioned ? 'text-red-400' : 'text-green-400'}>
+                      {analysis?.rangeRiskScore?.isSanctioned ? '⚠️ Flagged' : '✅ Clear'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Risk Category:</span>
+                    <span className="text-white">{analysis?.rangeRiskScore?.category ?? 'Unknown'}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* MEV Detection Data */}
+              <div className="bg-black/60 border border-gray-700 rounded-lg overflow-hidden">
+                <div className="px-3 py-2 bg-orange-500/10 border-b border-gray-700 flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-orange-400"></div>
+                  <span className="text-xs font-mono text-orange-400">QuickNode MEV</span>
+                </div>
+                <div className="p-3 space-y-2 text-xs font-mono">
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">MEV Detected:</span>
+                    <span className={analysis?.mevExposure?.detected ? 'text-red-400' : 'text-green-400'}>
+                      {analysis?.mevExposure?.detected ? 'Yes' : 'No'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Attack Count:</span>
+                    <span className="text-white">{analysis?.mevExposure?.count ?? 0}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Total Extracted:</span>
+                    <span className="text-white">
+                      {analysis?.mevExposure?.totalExtracted 
+                        ? `${(analysis.mevExposure.totalExtracted / 1e9).toFixed(4)} SOL`
+                        : '0 SOL'
+                      }
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Temporal Analysis */}
+              <div className="bg-black/60 border border-gray-700 rounded-lg overflow-hidden">
+                <div className="px-3 py-2 bg-blue-500/10 border-b border-gray-700 flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-blue-400"></div>
+                  <span className="text-xs font-mono text-blue-400">Temporal Analysis</span>
+                </div>
+                <div className="p-3 space-y-2 text-xs font-mono">
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Patterns Found:</span>
+                    <span className={analysis?.temporalAnalysis?.hasPatterns ? 'text-yellow-400' : 'text-green-400'}>
+                      {analysis?.temporalAnalysis?.hasPatterns ? 'Yes' : 'No'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Confidence:</span>
+                    <span className="text-white">{analysis?.temporalAnalysis?.confidence ?? 0}%</span>
+                  </div>
+                  {analysis?.temporalAnalysis?.commonHours && analysis.temporalAnalysis.commonHours.length > 0 && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Active Hours:</span>
+                      <span className="text-white">
+                        {analysis.temporalAnalysis.commonHours.map(h => `${h}:00`).join(', ')}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Gemini AI */}
+              <div className="bg-black/60 border border-gray-700 rounded-lg overflow-hidden">
+                <div className="px-3 py-2 bg-pink-500/10 border-b border-gray-700 flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-pink-400"></div>
+                  <span className="text-xs font-mono text-pink-400">Gemini AI Summary</span>
+                </div>
+                <div className="p-3 space-y-2 text-xs font-mono">
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Privacy Score:</span>
+                    <span className="text-white">{analysis?.aiSummary?.privacyScore ?? 'N/A'}/100</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Recommendations:</span>
+                    <span className="text-white">{analysis?.aiSummary?.recommendations?.length ?? 0}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Deanonymization Paths */}
+              <div className="bg-black/60 border border-gray-700 rounded-lg overflow-hidden">
+                <div className="px-3 py-2 bg-red-500/10 border-b border-gray-700 flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-red-400"></div>
+                  <span className="text-xs font-mono text-red-400">Risk Detection</span>
+                </div>
+                <div className="p-3 space-y-2 text-xs font-mono">
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Risks Identified:</span>
+                    <span className="text-white">{analysis?.risks?.length ?? 0}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Deanon Paths:</span>
+                    <span className="text-white">{analysis?.deanonymizationPaths?.length ?? 0}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Critical Risks:</span>
+                    <span className="text-red-400">
+                      {analysis?.risks?.filter(r => r.severity === 'critical').length ?? 0}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <p className="text-xs text-gray-500 text-center pt-2">
+                🔒 All data is fetched in real-time and not stored on our servers.
+              </p>
             </motion.div>
           )}
 

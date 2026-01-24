@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { TerminalHeader } from "@/components/terminal-header";
 import { GlobeBackground } from "@/components/globe-background";
 import { WalletInput } from "@/components/wallet-input";
+import Orb from "@/components/Orb";
 import { Shield, Eye, Lock } from "lucide-react";
 
 export default function Home() {
@@ -44,10 +45,10 @@ export default function Home() {
               transition={{ delay: 0.4 }}
               className="inline-block"
             >
-              <div className="px-4 py-1.5 rounded-full border-2 border-green-500/30 bg-green-500/5 text-sm font-mono uppercase tracking-wider text-green-400 inline-flex items-center gap-2">
+              <div className="px-4 py-1.5 rounded-full border-2 border-blue-500/30 bg-blue-500/5 text-sm font-mono uppercase tracking-wider text-blue-400 inline-flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
                 </span>
                 Devnet Privacy Analysis
               </div>
@@ -63,7 +64,7 @@ export default function Home() {
               >
                 Visualize your
                 <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-emerald-400 to-teal-400">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400">
                   privacy footprint
                 </span>
                 <br />
@@ -99,8 +100,8 @@ export default function Home() {
               className="grid grid-cols-3 gap-4 pt-4"
             >
               <div className="flex flex-col items-center text-center space-y-2">
-                <div className="h-12 w-12 rounded-lg bg-green-500/10 border border-green-500/30 flex items-center justify-center">
-                  <Eye className="h-6 w-6 text-green-400" />
+                <div className="h-12 w-12 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center">
+                  <Eye className="h-6 w-6 text-blue-400" />
                 </div>
                 <p className="text-xs text-gray-400 font-mono">
                   Deanonymization
@@ -109,8 +110,8 @@ export default function Home() {
                 </p>
               </div>
               <div className="flex flex-col items-center text-center space-y-2">
-                <div className="h-12 w-12 rounded-lg bg-green-500/10 border border-green-500/30 flex items-center justify-center">
-                  <Shield className="h-6 w-6 text-green-400" />
+                <div className="h-12 w-12 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center">
+                  <Shield className="h-6 w-6 text-blue-400" />
                 </div>
                 <p className="text-xs text-gray-400 font-mono">
                   MEV Risk
@@ -119,8 +120,8 @@ export default function Home() {
                 </p>
               </div>
               <div className="flex flex-col items-center text-center space-y-2">
-                <div className="h-12 w-12 rounded-lg bg-green-500/10 border border-green-500/30 flex items-center justify-center">
-                  <Lock className="h-6 w-6 text-green-400" />
+                <div className="h-12 w-12 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center">
+                  <Lock className="h-6 w-6 text-blue-400" />
                 </div>
                 <p className="text-xs text-gray-400 font-mono">
                   Privacy Cost
@@ -140,31 +141,17 @@ export default function Home() {
           >
             <div className="relative aspect-square">
               {/* Glowing orb effect */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-green-500/20 via-emerald-500/10 to-transparent blur-3xl" />
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500/20 via-cyan-500/10 to-transparent blur-3xl" />
               
-              {/* Placeholder for graph visualization */}
-              <div className="relative h-full w-full rounded-2xl border-2 border-green-500/20 bg-black/40 backdrop-blur-sm p-8 flex items-center justify-center">
-                <div className="text-center space-y-4">
-                  <motion.div
-                    animate={{
-                      scale: [1, 1.05, 1],
-                      rotate: [0, 360],
-                    }}
-                    transition={{
-                      duration: 20,
-                      repeat: Infinity,
-                      ease: "linear",
-                    }}
-                    className="mx-auto h-32 w-32 rounded-full border-4 border-green-500/30 bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center"
-                  >
-                    <Lock className="h-16 w-16 text-green-400" />
-                  </motion.div>
-                  <p className="text-sm text-gray-500 font-mono">
-                    Interactive graph visualization
-                    <br />
-                    coming in Feature 2
-                  </p>
-                </div>
+              {/* Animated Orb Visualization */}
+              <div className="relative h-full w-full rounded-2xl border-2 border-blue-500/20 bg-black/40 backdrop-blur-sm overflow-hidden">
+                <Orb
+                  hue={180}
+                  hoverIntensity={1.5}
+                  rotateOnHover
+                  forceHoverState={false}
+                  backgroundColor="#000000"
+                />
               </div>
             </div>
           </motion.div>
@@ -176,11 +163,11 @@ export default function Home() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1 }}
-        className="fixed bottom-0 left-0 right-0 z-50 border-t border-green-500/10 bg-black/80 backdrop-blur-sm px-6 py-4"
+        className="fixed bottom-0 left-0 right-0 z-50 border-t border-blue-500/10 bg-black/80 backdrop-blur-sm px-6 py-4"
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between text-sm font-mono">
           <span className="text-gray-500">© 2026 ECHO</span>
-          <span className="text-green-500/70">Powered by Solana</span>
+          <span className="text-blue-500/70">Powered by Solana</span>
         </div>
       </motion.footer>
     </div>

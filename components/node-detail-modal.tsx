@@ -140,10 +140,10 @@ export function NodeDetailModal({ isOpen, onClose, node, mainAddress }: NodeDeta
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-lg"
           >
-            <div className="bg-gray-900/95 border-2 border-green-500/30 rounded-2xl shadow-2xl shadow-green-500/10 overflow-hidden">
+            <div className="bg-gray-900/95 border-2 border-blue-500/30 rounded-2xl shadow-2xl shadow-blue-500/10 overflow-hidden">
               {/* Header */}
               <div className={`
-                px-6 py-4 border-b border-green-500/20
+                px-6 py-4 border-b border-blue-500/20
                 ${riskInfo.color === 'green' ? 'bg-green-500/10' : ''}
                 ${riskInfo.color === 'yellow' ? 'bg-yellow-500/10' : ''}
                 ${riskInfo.color === 'red' ? 'bg-red-500/10' : ''}
@@ -181,8 +181,8 @@ export function NodeDetailModal({ isOpen, onClose, node, mainAddress }: NodeDeta
                 {/* Address */}
                 <div className="space-y-2">
                   <label className="text-xs font-mono text-gray-500 uppercase tracking-wider">Address</label>
-                  <div className="flex items-center gap-2 bg-black/40 rounded-lg p-3 border border-green-500/20">
-                    <code className="flex-1 text-sm font-mono text-green-400 break-all">
+                  <div className="flex items-center gap-2 bg-black/40 rounded-lg p-3 border border-blue-500/20">
+                    <code className="flex-1 text-sm font-mono text-blue-400 break-all">
                       {node.address}
                     </code>
                     <div className="flex gap-1">
@@ -192,7 +192,7 @@ export function NodeDetailModal({ isOpen, onClose, node, mainAddress }: NodeDeta
                         title="Copy address"
                       >
                         {copied ? (
-                          <Check className="h-4 w-4 text-green-400" />
+                          <Check className="h-4 w-4 text-blue-400" />
                         ) : (
                           <Copy className="h-4 w-4 text-gray-400" />
                         )}
@@ -207,7 +207,7 @@ export function NodeDetailModal({ isOpen, onClose, node, mainAddress }: NodeDeta
                     </div>
                   </div>
                   {node.isMain && (
-                    <span className="inline-block px-2 py-1 text-xs font-mono bg-green-500/20 text-green-400 rounded">
+                    <span className="inline-block px-2 py-1 text-xs font-mono bg-blue-500/20 text-blue-400 rounded">
                       YOUR WALLET
                     </span>
                   )}
@@ -235,7 +235,7 @@ export function NodeDetailModal({ isOpen, onClose, node, mainAddress }: NodeDeta
                 {/* Type Explanation */}
                 <div className="space-y-3">
                   <label className="text-xs font-mono text-gray-500 uppercase tracking-wider">Address Type</label>
-                  <div className="flex items-start gap-3 bg-black/40 rounded-lg p-4 border border-green-500/20">
+                  <div className="flex items-start gap-3 bg-black/40 rounded-lg p-4 border border-blue-500/20">
                     <TypeIcon className="h-5 w-5 text-blue-400 mt-0.5" />
                     <p className="text-sm text-gray-300">{typeInfo.description}</p>
                   </div>
@@ -246,14 +246,14 @@ export function NodeDetailModal({ isOpen, onClose, node, mainAddress }: NodeDeta
                   <div className="space-y-3">
                     <label className="text-xs font-mono text-gray-500 uppercase tracking-wider">Connection Details</label>
                     <div className="grid grid-cols-2 gap-3">
-                      <div className="bg-black/40 rounded-lg p-3 border border-green-500/20">
+                      <div className="bg-black/40 rounded-lg p-3 border border-blue-500/20">
                         <div className="flex items-center gap-2 mb-1">
-                          <TrendingUp className="h-4 w-4 text-green-400" />
+                          <TrendingUp className="h-4 w-4 text-blue-400" />
                           <span className="text-xs text-gray-500">Confidence</span>
                         </div>
                         <span className="text-lg font-bold text-white">{node.confidence || 60}%</span>
                       </div>
-                      <div className="bg-black/40 rounded-lg p-3 border border-green-500/20">
+                      <div className="bg-black/40 rounded-lg p-3 border border-blue-500/20">
                         <div className="flex items-center gap-2 mb-1">
                           <Users className="h-4 w-4 text-blue-400" />
                           <span className="text-xs text-gray-500">Relationship</span>
@@ -292,19 +292,19 @@ export function NodeDetailModal({ isOpen, onClose, node, mainAddress }: NodeDeta
               </div>
 
               {/* Footer */}
-              <div className="px-6 py-4 border-t border-green-500/20 bg-black/40">
+              <div className="px-6 py-4 border-t border-blue-500/20 bg-black/40">
                 <div className="flex gap-3">
                   <Button
                     onClick={openExplorer}
                     variant="outline"
-                    className="flex-1 border-green-500/30 text-green-400 hover:bg-green-500/10"
+                    className="flex-1 border-blue-500/30 text-blue-400 hover:bg-blue-500/10"
                   >
                     <ExternalLink className="h-4 w-4 mr-2" />
                     View on Explorer
                   </Button>
                   <Button
                     onClick={onClose}
-                    className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
                   >
                     Close
                   </Button>
