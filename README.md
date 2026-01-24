@@ -2,7 +2,7 @@
 
 > **Making Blockchain Privacy Risks Visible and Actionable**
 
-[![Track 02: Privacy Tooling](https://img.shields.io/badge/Hackathon-Track%2002%20Privacy%20Tooling-blue?style=for-the-badge)](https://colosseum.org)
+[![Solana Privacy Hackathon | Track 02: Privacy Tooling](https://img.shields.io/badge/Hackathon-Track%2002%20Privacy%20Tooling-blue?style=for-the-badge)](https://colosseum.org)
 [![Next.js](https://img.shields.io/badge/Next.js-16.0-black?style=flat-square&logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)](https://typescriptlang.org)
 [![Solana](https://img.shields.io/badge/Solana-Devnet-14F195?style=flat-square&logo=solana)](https://solana.com)
@@ -10,7 +10,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](./LICENSE)
 
 <p align="center">
-  <strong>🏆 Built for Colosseum Hackathon - Track 02: Privacy Tooling ($15,000 Prize)</strong>
+  <strong>🏆 Built for Solana Privacy Hackathon - Track 02: Privacy Tooling</strong>
 </p>
 
 <p align="center">
