@@ -35,8 +35,13 @@ export function TerminalHeader() {
   }, [currentChar, currentLine, displayedLines]);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-sm border-b border-blue-500/20 px-6 py-3">
-      <div className="max-w-7xl mx-auto font-mono text-sm">
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="inline-block rounded-lg border-2 border-blue-500/30 bg-black/70 backdrop-blur-md px-8 py-5 shadow-2xl shadow-blue-500/20"
+    >
+      <div className="font-mono text-base space-y-1">
         {displayedLines.map((line, i) => (
           <motion.div
             key={i}
@@ -58,6 +63,6 @@ export function TerminalHeader() {
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }
