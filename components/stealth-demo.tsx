@@ -151,11 +151,16 @@ export function StealthDemo({ walletAddress }: StealthDemoProps) {
           <Ghost className="h-5 w-5 text-purple-400" />
         </div>
         <div>
-          <h3 className="text-lg font-mono font-bold text-purple-400">
-            ShadowWire Stealth Demo
-          </h3>
+          <div className="flex items-center gap-2">
+            <h3 className="text-lg font-mono font-bold text-purple-400">
+              ShadowWire Stealth
+            </h3>
+            <span className="px-1.5 py-0.5 text-[10px] font-mono bg-yellow-500/20 text-yellow-400 rounded border border-yellow-500/30">
+              DEMO MODE
+            </span>
+          </div>
           <p className="text-xs text-gray-400">
-            Private transfers with zero-knowledge proofs
+            Preview private transfers with zero-knowledge proofs
           </p>
         </div>
       </div>

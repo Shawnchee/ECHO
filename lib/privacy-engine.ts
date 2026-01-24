@@ -41,6 +41,10 @@ export interface WalletAnalysis {
   deanonymizationPaths: DeanonymizationPath[];
   aiSummary: PrivacySummary;
   rangeRiskScore: RangeRiskScore;
+  sanctionsCheck: {
+    isSanctioned: boolean;
+    isBlacklisted: boolean;
+  };
   mevExposure: {
     detected: boolean;
     count: number;
@@ -61,10 +65,11 @@ export async function analyzeWalletPrivacy(
 ): Promise<WalletAnalysis> {
   console.log(`🔍 Starting privacy analysis for ${address}`);
 
-  const [transactions, connectedAddresses, rangeRisk] = await Promise.all([
+  const [transactions, connectedAddresses, rangeRisk, sanctionsData] = await Promise.all([
     getTransactionHistory(address, 100),
     getConnectedAddresses(address, 100),
     getAddressRiskScore(address),
+    checkSanctions(address),
   ]);
 
   console.log(`📊 Fetched ${transactions.length} transactions`);
@@ -76,7 +81,8 @@ export async function analyzeWalletPrivacy(
     transactions,
     Array.from(connectedAddresses),
     temporalAnalysis,
-    rangeRisk
+    rangeRisk,
+    sanctionsData
   );
 
   const mevAnalysis = await analyzeMEVExposure(transactions);
@@ -107,6 +113,10 @@ export async function analyzeWalletPrivacy(
     deanonymizationPaths,
     aiSummary,
     rangeRiskScore: rangeRisk,
+    sanctionsCheck: {
+      isSanctioned: sanctionsData.isOfacSanctioned,
+      isBlacklisted: sanctionsData.isTokenBlacklisted,
+    },
     mevExposure: mevAnalysis,
     temporalAnalysis,
   };
@@ -120,7 +130,8 @@ async function detectPrivacyRisks(
   transactions: HeliusTransaction[],
   connectedAddresses: string[],
   temporalAnalysis: { hasPatterns: boolean; commonHours: number[]; confidence: number },
-  rangeRisk: RangeRiskScore
+  rangeRisk: RangeRiskScore,
+  sanctionsData: { isOfacSanctioned: boolean; isTokenBlacklisted: boolean }
 ): Promise<PrivacyRisk[]> {
   const risks: PrivacyRisk[] = [];
 
@@ -195,7 +206,6 @@ async function detectPrivacyRisks(
     });
   }
 
-  const sanctionsData = await checkSanctions(address);
   if (sanctionsData.isOfacSanctioned || sanctionsData.isTokenBlacklisted) {
     risks.push({
       id: "compliance-risk",

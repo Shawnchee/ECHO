@@ -159,11 +159,16 @@ export function SimulationPanel({ analysis, onSimulationChange }: SimulationPane
             <Zap className="h-4 w-4 text-cyan-400" />
           </div>
           <div className="text-left">
-            <h3 className="text-sm font-mono font-bold text-cyan-400">
-              Privacy Simulator
-            </h3>
+            <div className="flex items-center gap-2">
+              <h3 className="text-sm font-mono font-bold text-cyan-400">
+                Privacy Simulator
+              </h3>
+              <span className="px-1.5 py-0.5 text-[10px] font-mono bg-yellow-500/20 text-yellow-400 rounded border border-yellow-500/30">
+                SIMULATION
+              </span>
+            </div>
             <p className="text-xs text-gray-400">
-              "What If?" scenarios
+              "What If?" scenarios for privacy improvement
             </p>
           </div>
         </div>

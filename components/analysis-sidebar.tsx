@@ -457,17 +457,17 @@ export function AnalysisSidebar({ address, analysis }: AnalysisSidebarProps) {
                 <div className="p-3 space-y-2 text-xs font-mono">
                   <div className="flex justify-between">
                     <span className="text-gray-500">Risk Score:</span>
-                    <span className="text-white">{analysis?.rangeRiskScore?.riskScore ?? 'N/A'}</span>
+                    <span className="text-white">{analysis?.rangeRiskScore?.riskScore ?? 'N/A'}/10</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-500">Sanctions Check:</span>
-                    <span className={analysis?.rangeRiskScore?.isSanctioned ? 'text-red-400' : 'text-green-400'}>
-                      {analysis?.rangeRiskScore?.isSanctioned ? '⚠️ Flagged' : '✅ Clear'}
+                    <span className={analysis?.sanctionsCheck?.isSanctioned ? 'text-red-400' : 'text-green-400'}>
+                      {analysis?.sanctionsCheck?.isSanctioned ? '⚠️ Flagged' : '✅ Clear'}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Risk Category:</span>
-                    <span className="text-white">{analysis?.rangeRiskScore?.category ?? 'Unknown'}</span>
+                    <span className="text-gray-500">Risk Level:</span>
+                    <span className="text-white">{analysis?.rangeRiskScore?.riskLevel ?? 'Unknown'}</span>
                   </div>
                 </div>
               </div>
