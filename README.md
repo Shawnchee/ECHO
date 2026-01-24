@@ -176,6 +176,7 @@ Currently deployed on **Solana Devnet** for safe testing. Mainnet support is in 
 - Rate limiting to prevent API abuse
 - Warning modals for real-value analysis
 - Premium tier for heavy users
+- Collaboration with sponsor company for APIs
 
 ---
 
@@ -632,11 +633,11 @@ NEXT_PUBLIC_SOLANA_NETWORK=devnet
 ### Get Free API Keys
 
 | Service | Sign Up | Free Tier |
-|---------|---------|-----------|
-| [Helius](https://helius.dev) | ✅ Easy | 100k credits/month |
-| [Range](https://range.org) | ✅ Easy | 1k requests/month |
-| [QuickNode](https://quicknode.com) | ✅ Easy | Limited RPC |
-| [Gemini AI](https://ai.google.dev) | ✅ Easy | 60 RPM |
+|--------|---------|-----------|
+| [Helius](https://helius.dev) | ✅ Easy | 1,000,000 credits / month (Free plan) |
+| [Range](https://range.org) | ✅ Easy | 100 requests / month |
+| [QuickNode](https://quicknode.com) | ✅ Easy | ~10M API credits / month (Discover / Free tier) |
+| [Gemini AI](https://ai.google.dev) | ✅ Easy | Free tier with limited RPM & token quotas (varies by model) |
 
 ### Run Development Server
 
@@ -842,7 +843,6 @@ Built with support from hackathon sponsors:
 | **Helius** | Transaction indexing & connected addresses API |
 | **Range Protocol** | Risk scoring & compliance screening |
 | **QuickNode** | High-performance RPC & MEV detection |
-| **Google Gemini** | AI-powered privacy explanations |
 | **Radr Labs** | ShadowWire stealth transfer SDK |
 
 Special thanks to **Solana Privacy Hackathon** for organizing this hackathon.
@@ -854,5 +854,5 @@ Special thanks to **Solana Privacy Hackathon** for organizing this hackathon.
 </p>
 
 <p align="center">
-  Built with 💙 for Solana | Track 02: Privacy Tooling
+  Built with 💙 for Solana Privacy Hackathon | Track 02: Privacy Tooling
 </p>
