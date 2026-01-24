@@ -1,9 +1,9 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2, RefreshCw } from "lucide-react";
 import { GossipGraph } from "@/components/gossip-graph";
 import { AnalysisSidebar } from "@/components/analysis-sidebar";
 import { Button } from "@/components/ui/button";
@@ -13,53 +13,95 @@ interface AnalysisPageProps {
   params: Promise<{ address: string }>;
 }
 
+const MAX_RETRIES = 3;
+const RETRY_DELAY = 1500;
+
 export default function AnalysisPage({ params }: AnalysisPageProps) {
   const { address } = use(params);
   const router = useRouter();
   const [analysis, setAnalysis] = useState<WalletAnalysis | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
+  const [loadingStep, setLoadingStep] = useState(0);
+  
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const hasFetchedRef = useRef(false);
+
+  const fetchAnalysis = useCallback(async (retry = 0) => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    abortControllerRef.current = new AbortController();
+
+    try {
+      setLoading(true);
+      setError(null);
+      setLoadingStep(0);
+
+      const stepInterval = setInterval(() => {
+        setLoadingStep(prev => Math.min(prev + 1, 4));
+      }, 800);
+
+      const response = await fetch("/api/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ address }),
+        signal: abortControllerRef.current.signal,
+      });
+
+      clearInterval(stepInterval);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Analysis failed");
+      }
+
+      const data = await response.json();
+      setAnalysis(data);
+      setRetryCount(0);
+    } catch (err: any) {
+      if (err.name === 'AbortError') return;
+      
+      console.error("Analysis error:", err);
+      
+      if (retry < MAX_RETRIES) {
+        setRetryCount(retry + 1);
+        setTimeout(() => fetchAnalysis(retry + 1), RETRY_DELAY);
+      } else {
+        setError(err.message || "Failed to analyze wallet");
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [address]);
 
   useEffect(() => {
-    async function fetchAnalysis() {
-      try {
-        setLoading(true);
-        setError(null);
-
-        console.log("📡 Fetching analysis for address:", address);
-
-        const response = await fetch("/api/analyze", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ address }),
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || "Analysis failed");
-        }
-
-        const data = await response.json();
-        console.log("📊 Analysis data received:", {
-          address: data.address,
-          privacyScore: data.privacyScore,
-          transactionCount: data.transactionCount,
-          uniqueInteractions: data.uniqueInteractions,
-          risksCount: data.risks?.length,
-          pathsCount: data.deanonymizationPaths?.length,
-          paths: data.deanonymizationPaths,
-        });
-        setAnalysis(data);
-      } catch (err: any) {
-        console.error("Analysis error:", err);
-        setError(err.message || "Failed to analyze wallet");
-      } finally {
-        setLoading(false);
-      }
-    }
-
+    if (hasFetchedRef.current) return;
+    hasFetchedRef.current = true;
+    
     fetchAnalysis();
-  }, [address]);
+
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, [fetchAnalysis]);
+
+  const handleRetry = () => {
+    hasFetchedRef.current = false;
+    setRetryCount(0);
+    fetchAnalysis();
+  };
+
+  const loadingSteps = [
+    { text: "Fetching transactions from Helius...", active: loadingStep >= 0 },
+    { text: "Detecting deanonymization risks...", active: loadingStep >= 1 },
+    { text: "Analyzing temporal patterns...", active: loadingStep >= 2 },
+    { text: "Checking sanctions & blacklists (Range)...", active: loadingStep >= 3 },
+    { text: "Generating AI summary (Gemini)...", active: loadingStep >= 4 },
+  ];
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-black text-white">
@@ -81,13 +123,15 @@ export default function AnalysisPage({ params }: AnalysisPageProps) {
           <div className="text-center space-y-4">
             <Loader2 className="h-16 w-16 animate-spin text-blue-400 mx-auto" />
             <div className="space-y-2">
-              <p className="text-xl font-mono text-blue-400">Analyzing wallet...</p>
+              <p className="text-xl font-mono text-blue-400">
+                {retryCount > 0 ? `Retrying... (${retryCount}/${MAX_RETRIES})` : "Analyzing wallet..."}
+              </p>
               <div className="text-sm font-mono text-gray-400 space-y-1">
-                <p>▸ Fetching transactions from Helius...</p>
-                <p>▸ Detecting deanonymization risks...</p>
-                <p>▸ Analyzing temporal patterns...</p>
-                <p>▸ Checking sanctions & blacklists (Range)...</p>
-                <p>▸ Generating AI summary (Gemini)...</p>
+                {loadingSteps.map((step, i) => (
+                  <p key={i} className={step.active ? "text-blue-400" : "text-gray-600"}>
+                    {step.active ? "▸" : "○"} {step.text}
+                  </p>
+                ))}
               </div>
             </div>
           </div>
@@ -101,16 +145,42 @@ export default function AnalysisPage({ params }: AnalysisPageProps) {
             <div className="text-red-400 text-5xl">⚠️</div>
             <h2 className="text-2xl font-bold text-red-400 font-mono">Analysis Failed</h2>
             <p className="text-gray-300">{error}</p>
-            <Button
-              onClick={() => router.push("/")}
-              variant="outline"
-              className="border-red-500/30 text-red-400 hover:bg-red-500/10"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Search
-            </Button>
+            <div className="flex gap-3 justify-center">
+              <Button
+                onClick={handleRetry}
+                variant="outline"
+                className="border-blue-500/30 text-blue-400 hover:bg-blue-500/10"
+              >
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Retry
+              </Button>
+              <Button
+                onClick={() => router.push("/")}
+                variant="outline"
+                className="border-red-500/30 text-red-400 hover:bg-red-500/10"
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Search
+              </Button>
+            </div>
           </div>
         </div>
+      )}
+
+      {/* Skeleton Loading State */}
+      {!analysis && !loading && !error && (
+        <main className="relative z-10 pt-32 pb-8 px-6">
+          <div className="max-w-[1800px] mx-auto">
+            <div className="mb-6 space-y-4">
+              <div className="h-10 w-96 bg-blue-500/10 rounded animate-pulse" />
+              <div className="h-6 w-64 bg-blue-500/10 rounded animate-pulse" />
+            </div>
+            <div className="grid lg:grid-cols-[1fr,400px] gap-6">
+              <div className="h-[calc(100vh-280px)] min-h-[600px] rounded-2xl border-2 border-blue-500/20 bg-black/40 animate-pulse" />
+              <div className="h-[calc(100vh-280px)] min-h-[600px] rounded-2xl border-2 border-blue-500/20 bg-black/40 animate-pulse" />
+            </div>
+          </div>
+        </main>
       )}
 
       {/* Main Content */}
