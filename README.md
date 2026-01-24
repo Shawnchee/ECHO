@@ -2,7 +2,11 @@
 
 > **Making Blockchain Privacy Risks Visible and Actionable**
 
-[![Solana Privacy Hackathon | Track 02: Privacy Tooling](https://img.shields.io/badge/Hackathon-Track%2002%20Privacy%20Tooling-blue?style=for-the-badge)](https://Solana Privacy Hackathon.org)
+<p align="center">
+  <img src="./echo-pic.png" alt="ECHO - Visualize your privacy footprint on Solana" width="100%">
+</p>
+
+[![Solana Privacy Hackathon | Track 02: Privacy Tooling](https://img.shields.io/badge/Solana%20Privacy%20Hackathon%202025-Track%2002%20Privacy%20Tooling-blue?style=for-the-badge)](https://solana.com/privacyhack)
 [![Next.js](https://img.shields.io/badge/Next.js-16.0-black?style=flat-square&logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)](https://typescriptlang.org)
 [![Solana](https://img.shields.io/badge/Solana-Devnet-14F195?style=flat-square&logo=solana)](https://solana.com)
@@ -37,12 +41,81 @@ Blockchain's transparency is a double-edged sword. While it enables trustless ve
 
 #### The Statistics Are Alarming:
 
-| Risk | Impact |
+| Claim | Impact |
 |------|--------|
-| **Exchange interactions** | KYC at centralized exchanges permanently links wallet to real identity |
-| **$900M+ extracted via MEV** | On Ethereum in 2023 (Jito data shows Solana MEV growing) |
-| **Blockchain forensics** | Most wallets can be deanonymized within 3-5 transaction hops |
-| **Temporal patterns** | Users who transact at predictable times leak timezone/location data |
+| **>$300M MEV extracted (lower bound)** | Value systematically siphoned from users via transaction ordering |
+| **Solana MEV activity accelerating** | Priority fees & bundles indicate validator-level extraction |
+| **Sandwich & frontrun attacks are common** | Retail traders receive worse execution |
+| **Wallets deanonymized in few hops** | Identity & behavior leakage is structural |
+
+### 📚 Verifiable On-Chain Evidence (Primary Sources)
+
+All claims made above are backed by **public dashboards, on-chain analytics, or primary research**.  
+Below are **direct links to verifiable evidence** used to justify ECHO’s threat model.
+
+---
+
+#### 🧠 MEV Is a Proven, Measurable Threat
+
+**Ethereum (Baseline for MEV Research)**  
+- **Flashbots MEV-Explore** tracks and classifies MEV transactions directly from Ethereum blocks.
+- Flashbots’ own research shows **>$300M USD in conservatively measured MEV extracted** since 2020 — explicitly stated as a *lower bound* due to incomplete visibility.
+
+**Proof (Primary Source):**
+- MEV Dashboard: https://explore.flashbots.net  
+- Research Paper: https://writings.flashbots.net/quantifying-mev/
+
+> Flashbots note that real MEV is *higher* than reported due to unclassified and private-orderflow activity.
+
+---
+
+**Solana (Rapidly Growing MEV Surface)**  
+- **Jito Labs**, the largest block engine operator on Solana, publishes real-time MEV statistics.
+- Their public stats show **sustained growth in priority fees, bundles, and block-level extraction** — strong indicators of active MEV markets.
+
+**Proof (Primary Source):**
+- Jito MEV Stats Dashboard: https://jito.wtf/stats
+
+> This confirms that MEV is not Ethereum-specific and is increasingly relevant on Solana.
+
+---
+
+#### 🥪 Sandwich & Frontrunning Attacks Are Documented
+
+**Solana DEX Sandwiching**  
+- Helius documents transaction ordering manipulation and sandwich behavior on Solana DEXs.
+- These attacks exploit deterministic execution and priority fees — directly harming retail traders.
+
+**Proof (Primary Source):**
+- Helius Blog (Transaction & MEV Analysis):  
+  https://www.helius.dev/blog
+
+> These attacks are detectable through balance deltas and transaction adjacency — the same signals used by ECHO.
+
+---
+
+#### 🕵️ Blockchain Deanonymization Is Well-Studied
+
+- Academic and industry research shows wallets can often be **linked within a small number of hops** using transaction graphs, timing, and counterparty reuse.
+
+**Representative Research:**
+- Flashbots: Transaction graph clustering & MEV flow analysis  
+- Industry forensics tools (Chainalysis / TRM / Elliptic) use identical techniques commercially
+
+> ECHO applies these techniques defensively — to **warn users**, not exploit them.
+
+---
+
+#### ✅ Why This Evidence Matters
+
+These sources prove that:
+- MEV extraction is **real, ongoing, and measurable**
+- Solana is **not immune** to these dynamics
+- Transaction ordering leaks **economic and identity signals**
+- Wallet privacy loss is **structural**, not user error
+
+**ECHO’s role** is to surface these risks *before* users are harmed — making invisible threats visible and actionable.
+
 
 ### Why This Matters for Track 02: Privacy Tooling
 
