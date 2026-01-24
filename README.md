@@ -59,38 +59,37 @@ Below are **direct links to verifiable evidence** used to justify ECHO’s threa
 
 **Ethereum (Baseline for MEV Research)**  
 - **Flashbots MEV-Explore** tracks and classifies MEV transactions directly from Ethereum blocks.
-- Flashbots’ own research shows **>$300M USD in conservatively measured MEV extracted** since 2020 — explicitly stated as a *lower bound* due to incomplete visibility.
+- Flashbots' comprehensive blockchain analysis classified **more than 1.3M MEV transactions and found at least $314M worth of Extracted MEV since January 1st, 2020**, plus $4.5M in wasted gas fees from failed MEV attempts.
 
 **Proof (Primary Source):**
-- MEV Dashboard: https://explore.flashbots.net  
-- Research Paper: https://writings.flashbots.net/quantifying-mev/
+- Flashbots MEV Research: https://writings.flashbots.net/quantifying-mev/
 
-> Flashbots note that real MEV is *higher* than reported due to unclassified and private-orderflow activity.
+> This data comes from scraping the Ethereum blockchain starting from the first block of 2020, providing a measured and verifiable baseline for understanding MEV's real-world impact.
 
 ---
 
 **Solana (Rapidly Growing MEV Surface)**  
-- **Jito Labs**, the largest block engine operator on Solana, publishes real-time MEV statistics.
-- Their public stats show **sustained growth in priority fees, bundles, and block-level extraction** — strong indicators of active MEV markets.
+- **Jito Labs**, the largest block engine operator on Solana, launched the **first MEV dashboard for Solana**, enabling transparent classification of MEV transactions including arbitrages, liquidations, and other extractive activities.
+- This public dashboard confirms that MEV activity on Solana is **real, measurable, and growing**.
 
 **Proof (Primary Source):**
-- Jito MEV Stats Dashboard: https://jito.wtf/stats
+- Jito Labs Solana MEV Dashboard announcement: https://www.jito.wtf/blog/introducing-the-first-solana-mev-dashboard/
 
-> This confirms that MEV is not Ethereum-specific and is increasingly relevant on Solana.
+> Jito Labs' MEV dashboard classifies transactions on-chain, proving that MEV is not Ethereum-specific and is increasingly relevant on Solana.
 
 ---
 
 #### 🥪 Sandwich & Frontrunning Attacks Are Documented
 
 **Solana DEX Sandwiching**  
-- Helius documents transaction ordering manipulation and sandwich behavior on Solana DEXs.
-- These attacks exploit deterministic execution and priority fees — directly harming retail traders.
+- Sandwich attacks are a **well-documented form of MEV on Solana**, where bots or validators place one transaction before and one after a user's trade to extract profit at the user's expense.
+- The **Solana Foundation removed validators for engaging in sandwich attacks** against retail users, with ecosystem leaders acknowledging these attacks harm user execution prices.
 
-**Proof (Primary Source):**
-- Helius Blog (Transaction & MEV Analysis):  
-  https://www.helius.dev/blog
+**Proof (Primary Sources):**
+- Solana Foundation removed validators for sandwich attacks against retail users: https://www.coinmarketcal.com/ko/news/solana-foundation-expels-validators-for-sandwich-attacks-on-retail-users
+- Coverage of the sandwich attack phenomenon on Solana: https://www.cointelegraph.com/news/solana-removes-validators-sandwich-attacks
 
-> These attacks are detectable through balance deltas and transaction adjacency — the same signals used by ECHO.
+> A sandwich attack involves placing two transactions around a victim's transaction to manipulate price and profit, often leaving the victim with worse execution than they would otherwise receive — the same attack pattern ECHO detects and warns users about.
 
 ---
 
