@@ -74,7 +74,7 @@ If this is your first time contributing to open source, welcome! Here are some r
 ### 🐛 Reporting Bugs
 
 Before creating a bug report:
-1. Check the [existing issues](https://github.com/yourusername/ECHO/issues) to avoid duplicates
+1. Check the [existing issues](https://github.com/Shawnchee/ECHO/issues) to avoid duplicates
 2. Collect information about the bug:
    - Steps to reproduce
    - Expected vs actual behavior

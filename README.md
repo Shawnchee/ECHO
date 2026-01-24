@@ -526,7 +526,7 @@ const simulation = await simulatePrivateTransfer({
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/ECHO.git
+git clone https://github.com/Shawnchee/ECHO.git
 cd ECHO
 
 # Install dependencies
@@ -728,7 +728,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ```bash
 # Fork and clone
-git clone https://github.com/yourusername/ECHO.git
+git clone https://github.com/Shawnchee/ECHO.git
 
 # Create feature branch
 git checkout -b feature/amazing-feature
