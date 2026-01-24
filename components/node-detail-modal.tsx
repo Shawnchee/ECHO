@@ -138,12 +138,12 @@ export function NodeDetailModal({ isOpen, onClose, node, mainAddress }: NodeDeta
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-lg"
+            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-md"
           >
-            <div className="bg-gray-900/95 border-2 border-blue-500/30 rounded-2xl shadow-2xl shadow-blue-500/10 overflow-hidden">
+            <div className="bg-gray-900/95 border-2 border-blue-500/30 rounded-2xl shadow-2xl shadow-blue-500/10 overflow-hidden max-h-[80vh] flex flex-col">
               {/* Header */}
               <div className={`
-                px-6 py-4 border-b border-blue-500/20
+                px-4 py-3 border-b border-blue-500/20 flex-shrink-0
                 ${riskInfo.color === 'green' ? 'bg-green-500/10' : ''}
                 ${riskInfo.color === 'yellow' ? 'bg-yellow-500/10' : ''}
                 ${riskInfo.color === 'red' ? 'bg-red-500/10' : ''}
@@ -177,7 +177,7 @@ export function NodeDetailModal({ isOpen, onClose, node, mainAddress }: NodeDeta
               </div>
 
               {/* Content */}
-              <div className="p-6 space-y-6">
+              <div className="p-4 space-y-4 overflow-y-auto flex-1">
                 {/* Address */}
                 <div className="space-y-2">
                   <label className="text-xs font-mono text-gray-500 uppercase tracking-wider">Address</label>
@@ -214,11 +214,11 @@ export function NodeDetailModal({ isOpen, onClose, node, mainAddress }: NodeDeta
                 </div>
 
                 {/* Risk Explanation */}
-                <div className="space-y-3">
+                <div className="space-y-2">
                   <label className="text-xs font-mono text-gray-500 uppercase tracking-wider">Risk Analysis</label>
                   <p className="text-sm text-gray-300">{riskInfo.description}</p>
                   
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     {riskInfo.implications.map((implication, i) => (
                       <div key={i} className="flex items-start gap-2">
                         <span className={`mt-1.5 h-1.5 w-1.5 rounded-full flex-shrink-0
@@ -233,19 +233,19 @@ export function NodeDetailModal({ isOpen, onClose, node, mainAddress }: NodeDeta
                 </div>
 
                 {/* Type Explanation */}
-                <div className="space-y-3">
+                <div className="space-y-2">
                   <label className="text-xs font-mono text-gray-500 uppercase tracking-wider">Address Type</label>
-                  <div className="flex items-start gap-3 bg-black/40 rounded-lg p-4 border border-blue-500/20">
-                    <TypeIcon className="h-5 w-5 text-blue-400 mt-0.5" />
-                    <p className="text-sm text-gray-300">{typeInfo.description}</p>
+                  <div className="flex items-start gap-2 bg-black/40 rounded-lg p-3 border border-blue-500/20">
+                    <TypeIcon className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0" />
+                    <p className="text-xs text-gray-300">{typeInfo.description}</p>
                   </div>
                 </div>
 
                 {/* Connection Info */}
                 {!node.isMain && (
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     <label className="text-xs font-mono text-gray-500 uppercase tracking-wider">Connection Details</label>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-2 gap-2">
                       <div className="bg-black/40 rounded-lg p-3 border border-blue-500/20">
                         <div className="flex items-center gap-2 mb-1">
                           <TrendingUp className="h-4 w-4 text-blue-400" />
@@ -265,9 +265,9 @@ export function NodeDetailModal({ isOpen, onClose, node, mainAddress }: NodeDeta
                 )}
 
                 {/* Recommendations */}
-                <div className="space-y-3">
+                <div className="space-y-2">
                   <label className="text-xs font-mono text-gray-500 uppercase tracking-wider">Recommendations</label>
-                  <div className={`rounded-lg p-4 border
+                  <div className={`rounded-lg p-3 border text-xs
                     ${riskInfo.color === 'green' ? 'bg-green-500/5 border-green-500/20' : ''}
                     ${riskInfo.color === 'yellow' ? 'bg-yellow-500/5 border-yellow-500/20' : ''}
                     ${riskInfo.color === 'red' ? 'bg-red-500/5 border-red-500/20' : ''}
@@ -292,8 +292,8 @@ export function NodeDetailModal({ isOpen, onClose, node, mainAddress }: NodeDeta
               </div>
 
               {/* Footer */}
-              <div className="px-6 py-4 border-t border-blue-500/20 bg-black/40">
-                <div className="flex gap-3">
+              <div className="px-4 py-3 border-t border-blue-500/20 bg-black/40 flex-shrink-0">
+                <div className="flex gap-2">
                   <Button
                     onClick={openExplorer}
                     variant="outline"

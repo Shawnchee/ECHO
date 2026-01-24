@@ -1,11 +1,12 @@
 /**
  * Gemini AI Client
  * Generate plain-language privacy summaries and explanations
- * Using Gemini 2.5 Flash model
+ * Using Gemini 2.5 Flash model with Google GenAI SDK
  */
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent";
+import { GoogleGenAI } from "@google/genai";
+
+const client = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export interface PrivacySummary {
   summary: string;
@@ -49,22 +50,13 @@ Format your response as JSON:
 }
 `;
 
-    const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-      }),
+    const response = await client.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
     });
 
-    if (!response.ok) {
-      throw new Error(`Gemini API error: ${response.status}`);
-    }
+    const text = response.text || "{}";
 
-    const data = await response.json();
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
-
-    // Extract JSON from response (might be wrapped in markdown)
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     const parsed = jsonMatch ? JSON.parse(jsonMatch[0]) : {};
 
@@ -76,7 +68,6 @@ Format your response as JSON:
     };
   } catch (error) {
     console.error("Gemini API error:", error);
-    // Fallback to rule-based summary
     return generateFallbackSummary(walletData);
   }
 }
@@ -92,7 +83,6 @@ function calculatePrivacyScore(walletData: {
 }): number {
   let score = 100;
 
-  // Deduct for risks
   const criticalRisks = walletData.risks.filter((r) => r.severity === "critical").length;
   const highRisks = walletData.risks.filter((r) => r.severity === "high").length;
   const mediumRisks = walletData.risks.filter((r) => r.severity === "medium").length;
@@ -101,13 +91,11 @@ function calculatePrivacyScore(walletData: {
   score -= highRisks * 10;
   score -= mediumRisks * 5;
 
-  // Deduct for high interaction count (more exposure)
   if (walletData.uniqueInteractions > 50) score -= 10;
   if (walletData.uniqueInteractions > 100) score -= 10;
 
-  // Factor in Range risk score
   if (walletData.rangeRiskScore) {
-    score -= walletData.rangeRiskScore * 0.3; // 30% weight to Range score
+    score -= walletData.rangeRiskScore * 0.3;
   }
 
   return Math.max(0, Math.min(100, Math.round(score)));

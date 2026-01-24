@@ -61,7 +61,6 @@ export async function analyzeWalletPrivacy(
 ): Promise<WalletAnalysis> {
   console.log(`🔍 Starting privacy analysis for ${address}`);
 
-  // Fetch all data in parallel
   const [transactions, connectedAddresses, rangeRisk] = await Promise.all([
     getTransactionHistory(address, 100),
     getConnectedAddresses(address, 100),
@@ -70,10 +69,8 @@ export async function analyzeWalletPrivacy(
 
   console.log(`📊 Fetched ${transactions.length} transactions`);
 
-  // Analyze temporal patterns
   const temporalAnalysis = analyzeTemporalPatterns(transactions);
 
-  // Detect deanonymization risks
   const risks = await detectPrivacyRisks(
     address,
     transactions,
@@ -82,17 +79,14 @@ export async function analyzeWalletPrivacy(
     rangeRisk
   );
 
-  // Detect MEV exposure
   const mevAnalysis = await analyzeMEVExposure(transactions);
 
-  // Build deanonymization paths
   const deanonymizationPaths = await buildDeanonymizationPaths(
     address,
     transactions,
     connectedAddresses
   );
 
-  // Generate AI summary
   const aiSummary = await generatePrivacySummary({
     address,
     transactionCount: transactions.length,
@@ -130,7 +124,6 @@ async function detectPrivacyRisks(
 ): Promise<PrivacyRisk[]> {
   const risks: PrivacyRisk[] = [];
 
-  // Risk 1: Linked KYC Exchange Wallet
   const exchangeAddresses = detectExchangeLinks(connectedAddresses);
   if (exchangeAddresses.length > 0) {
     risks.push({
@@ -149,9 +142,7 @@ async function detectPrivacyRisks(
     });
   }
 
-  // Risk 2: Temporal Correlation
   if (temporalAnalysis.hasPatterns) {
-    // Convert hours to AM/PM format
     const formatHour = (hour: number) => {
       if (hour === 0) return "12 AM";
       if (hour === 12) return "12 PM";
@@ -174,7 +165,6 @@ async function detectPrivacyRisks(
     });
   }
 
-  // Risk 3: Amount Correlation
   const amountRisk = detectAmountCorrelation(transactions);
   if (amountRisk.detected) {
     risks.push({
@@ -190,7 +180,6 @@ async function detectPrivacyRisks(
     });
   }
 
-  // Risk 4: Repeat Interactions
   const repeatRisk = detectRepeatInteractions(connectedAddresses);
   if (repeatRisk.detected) {
     risks.push({
@@ -206,7 +195,6 @@ async function detectPrivacyRisks(
     });
   }
 
-  // Risk 5: Sanctions/Blacklist (from Range)
   const sanctionsData = await checkSanctions(address);
   if (sanctionsData.isOfacSanctioned || sanctionsData.isTokenBlacklisted) {
     risks.push({
@@ -224,7 +212,6 @@ async function detectPrivacyRisks(
     });
   }
 
-  // Risk 6: High Risk from Range Analysis
   if (rangeRisk.riskScore >= 7) {
     risks.push({
       id: "range-high-risk",
@@ -239,7 +226,6 @@ async function detectPrivacyRisks(
     });
   }
 
-  // Sort by severity
   const severityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
   risks.sort((a, b) => severityOrder[a.severity] - severityOrder[b.severity]);
 
@@ -251,20 +237,15 @@ async function detectPrivacyRisks(
  * NOTE: Uses heuristics instead of Range API to save API credits
  */
 function detectExchangeLinks(addresses: string[]): string[] {
-  // Known exchange patterns (simplified - in production use a database)
   const KNOWN_EXCHANGE_PATTERNS = [
     /^(coinbase|binance|kraken|ftx|okx|bybit|kucoin)/i,
   ];
   
-  // Known Solana exchange addresses (add more as needed)
-  const KNOWN_EXCHANGES = new Set<string>([
-    // Add known Devnet exchange addresses here
-  ]);
+  const KNOWN_EXCHANGES = new Set<string>([]);
 
   const exchangeAddresses: string[] = [];
 
   for (const addr of addresses) {
-    // Check against known exchanges
     if (KNOWN_EXCHANGES.has(addr)) {
       exchangeAddresses.push(addr);
     }
@@ -369,7 +350,6 @@ async function analyzeMEVExposure(transactions: HeliusTransaction[]): Promise<{
   let mevCount = 0;
   let totalExtracted = 0;
 
-  // Check first 20 transactions for MEV (rate limiting)
   for (const tx of transactions.slice(0, 20)) {
     try {
       const mev = await detectMEV(tx.signature);
@@ -377,9 +357,7 @@ async function analyzeMEVExposure(transactions: HeliusTransaction[]): Promise<{
         mevCount++;
         totalExtracted += mev.extractedValue;
       }
-    } catch (error) {
-      // Continue on error
-    }
+    } catch (error) {}
   }
 
   return {
@@ -401,7 +379,6 @@ async function buildDeanonymizationPaths(
 
   console.log(`🔗 Building deanonymization paths from ${connectedAddresses.size} connected addresses`);
 
-  // Always include the main wallet as a node, even if no connected addresses
   if (connectedAddresses.size === 0) {
     console.log("⚠️ No connected addresses found, creating single-node graph");
     paths.push({
@@ -411,30 +388,33 @@ async function buildDeanonymizationPaths(
     return paths;
   }
 
-  // Build paths from connected addresses
-  // NOTE: We DON'T call Range API here to save credits - use local heuristics
-  const firstHop = Array.from(connectedAddresses).slice(0, 8); // Take up to 8 addresses
+  const firstHop = Array.from(connectedAddresses).slice(0, 8);
 
-  // Known program addresses for type detection
   const KNOWN_PROGRAMS = new Set([
-    "11111111111111111111111111111111", // System Program
-    "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA", // Token Program
-    "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL", // Associated Token
+    "11111111111111111111111111111111",
+    "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+    "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL",
   ]);
 
   for (const hop1 of firstHop) {
-    // Skip empty addresses
     if (!hop1 || hop1.trim() === "") continue;
 
-    // Detect type locally without API calls
     let nodeType: "wallet" | "exchange" | "program" = "wallet";
     if (KNOWN_PROGRAMS.has(hop1)) {
       nodeType = "program";
     }
 
-    // Default risk level (no API call)
+    const txCountWithAddress = transactions.filter(tx => {
+      const involved = [
+        ...(tx.nativeTransfers?.map(t => [t.fromUserAccount, t.toUserAccount]).flat() || []),
+        ...(tx.tokenTransfers?.map(t => [t.fromUserAccount, t.toUserAccount]).flat() || [])
+      ];
+      return involved.includes(hop1);
+    }).length;
+    
+    const confidence = Math.min(95, 40 + (txCountWithAddress * 11));
+
     const riskLevel: "low" | "medium" | "high" | "critical" = "low";
-    const confidence = 60;
 
     paths.push({
       nodes: [

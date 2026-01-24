@@ -36,7 +36,6 @@ export function AnalysisSidebar({ address, analysis }: AnalysisSidebarProps) {
   const [expandedRisk, setExpandedRisk] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"overview" | "simulation" | "stealth" | "heatmap" | "export" | "badges" | "logs">("overview");
 
-  // Use real data only - no fallbacks
   const privacyScore = analysis?.privacyScore ?? 0;
   const transactionCount = analysis?.transactionCount ?? 0;
   const uniqueInteractions = analysis?.uniqueInteractions ?? 0;
@@ -51,7 +50,6 @@ export function AnalysisSidebar({ address, analysis }: AnalysisSidebarProps) {
         ? "yellow"
         : "red";
 
-  // Tab buttons
   const tabs = [
     { id: "overview" as const, icon: Shield, label: "Overview" },
     { id: "simulation" as const, icon: Play, label: "Simulate" },

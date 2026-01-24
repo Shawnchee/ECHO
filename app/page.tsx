@@ -15,7 +15,6 @@ export default function Home() {
 
   const handleAnalyze = (address: string) => {
     setSelectedWallet(address);
-    // Navigate to analysis page
     router.push(`/analysis/${address}`);
   };
 
