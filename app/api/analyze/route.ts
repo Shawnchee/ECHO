@@ -4,7 +4,25 @@ import { PublicKey } from "@solana/web3.js";
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    // Safely parse request body
+    let body;
+    try {
+      const text = await request.text();
+      if (!text || text.trim() === "") {
+        return NextResponse.json(
+          { error: "Request body is empty" },
+          { status: 400 }
+        );
+      }
+      body = JSON.parse(text);
+    } catch (parseError) {
+      console.error("Failed to parse request body:", parseError);
+      return NextResponse.json(
+        { error: "Invalid JSON in request body" },
+        { status: 400 }
+      );
+    }
+    
     const { address } = body;
 
     // Validate address
