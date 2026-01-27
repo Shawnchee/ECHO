@@ -10,6 +10,7 @@
 [![Next.js](https://img.shields.io/badge/Next.js-16.0-black?style=flat-square&logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)](https://typescriptlang.org)
 [![Solana](https://img.shields.io/badge/Solana-Devnet-14F195?style=flat-square&logo=solana)](https://solana.com)
+[![React](https://img.shields.io/badge/React-19.2-61DAFB?style=flat-square&logo=react)](https://react.dev)
 [![Tests](https://img.shields.io/badge/Tests-11%20Passing-green?style=flat-square)](./tests)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](./LICENSE)
 
@@ -23,8 +24,33 @@
   <a href="#-features">Features</a> •
   <a href="#-quick-start">Quick Start</a> •
   <a href="#-sponsor-integrations">Sponsors</a> •
-  <a href="#-contributing">Contributing</a>
+  <a href="#-demo">Demo</a>
 </p>
+
+---
+
+## 📋 Table of Contents
+
+- [The Problem](#-the-problem)
+- [The Solution](#-the-solution)
+- [Features](#-features)
+  - [Privacy Analysis Engine](#1--privacy-analysis-engine)
+  - [Interactive Graph Visualization](#2--interactive-graph-visualization)
+  - [Node Detail Modal](#3--node-detail-modal)
+  - [AI-Powered Privacy Summaries](#4--ai-powered-privacy-summaries)
+  - [Privacy Simulation Panel](#5--privacy-simulation-panel)
+  - [Gamification & Badges](#6--gamification--badges)
+  - [Compliance Heatmap](#7--compliance-heatmap)
+  - [Export Panel](#8--export-panel)
+  - [API Logs Tab](#9--api-logs-tab)
+- [Sponsor Integrations](#-sponsor-integrations)
+- [Architecture](#-architecture)
+- [Quick Start](#-quick-start)
+- [Testing](#-testing)
+- [Project Structure](#-project-structure)
+- [Tech Stack](#-tech-stack)
+- [Troubleshooting](#-troubleshooting)
+- [Roadmap](#-roadmap)
 
 ---
 
@@ -50,75 +76,32 @@ Blockchain's transparency is a double-edged sword. While it enables trustless ve
 
 ### 📚 Verifiable On-Chain Evidence (Primary Sources)
 
-All claims made above are backed by **public dashboards, on-chain analytics, or primary research**.  
-Below are **direct links to verifiable evidence** used to justify ECHO’s threat model.
-
----
+All claims made above are backed by **public dashboards, on-chain analytics, or primary research**.
 
 #### 🧠 MEV Is a Proven, Measurable Threat
 
 **Ethereum (Baseline for MEV Research)**  
-- **Flashbots MEV-Explore** tracks and classifies MEV transactions directly from Ethereum blocks.
 - Flashbots' comprehensive blockchain analysis classified **more than 1.3M MEV transactions and found at least $314M worth of Extracted MEV since January 1st, 2020**, plus $4.5M in wasted gas fees from failed MEV attempts.
 
 **Proof (Primary Source):**
 - Flashbots MEV Research: https://writings.flashbots.net/quantifying-mev/
 
-> This data comes from scraping the Ethereum blockchain starting from the first block of 2020, providing a measured and verifiable baseline for understanding MEV's real-world impact.
-
----
-
 **Solana (Rapidly Growing MEV Surface)**  
-- **Jito Labs**, the largest block engine operator on Solana, launched the **first MEV dashboard for Solana**, enabling transparent classification of MEV transactions including arbitrages, liquidations, and other extractive activities.
-- This public dashboard confirms that MEV activity on Solana is **real, measurable, and growing**.
+- **Jito Labs**, the largest block engine operator on Solana, launched the **first MEV dashboard for Solana**, confirming that MEV activity on Solana is **real, measurable, and growing**.
 
 **Proof (Primary Source):**
-- Jito Labs Solana MEV Dashboard announcement: https://www.jito.wtf/blog/introducing-the-first-solana-mev-dashboard/
-
-> Jito Labs' MEV dashboard classifies transactions on-chain, proving that MEV is not Ethereum-specific and is increasingly relevant on Solana.
-
----
+- Jito Labs Solana MEV Dashboard: https://www.jito.wtf/blog/introducing-the-first-solana-mev-dashboard/
 
 #### 🥪 Sandwich & Frontrunning Attacks Are Documented
 
-**Solana DEX Sandwiching**  
-- Sandwich attacks are a **well-documented form of MEV on Solana**, where bots or validators place one transaction before and one after a user's trade to extract profit at the user's expense.
-- The **Solana Foundation removed validators for engaging in sandwich attacks** against retail users, with ecosystem leaders acknowledging these attacks harm user execution prices.
+- The **Solana Foundation removed validators for engaging in sandwich attacks** against retail users.
 
 **Proof (Primary Sources):**
-- Solana Foundation removed validators for sandwich attacks against retail users: https://www.coinmarketcal.com/ko/news/solana-foundation-expels-validators-for-sandwich-attacks-on-retail-users
-- Coverage of the sandwich attack phenomenon on Solana: https://www.cointelegraph.com/news/solana-removes-validators-sandwich-attacks
-
-> A sandwich attack involves placing two transactions around a victim's transaction to manipulate price and profit, often leaving the victim with worse execution than they would otherwise receive — the same attack pattern ECHO detects and warns users about.
-
----
-
-#### 🕵️ Blockchain Deanonymization Is Well-Studied
-
-- Academic and industry research shows wallets can often be **linked within a small number of hops** using transaction graphs, timing, and counterparty reuse.
-
-**Representative Research:**
-- Flashbots: Transaction graph clustering & MEV flow analysis  
-- Industry forensics tools (Chainalysis / TRM / Elliptic) use identical techniques commercially
-
-> ECHO applies these techniques defensively — to **warn users**, not exploit them.
-
----
-
-#### ✅ Why This Evidence Matters
-
-These sources prove that:
-- MEV extraction is **real, ongoing, and measurable**
-- Solana is **not immune** to these dynamics
-- Transaction ordering leaks **economic and identity signals**
-- Wallet privacy loss is **structural**, not user error
-
-**ECHO’s role** is to surface these risks *before* users are harmed — making invisible threats visible and actionable.
-
+- https://www.coinmarketcal.com/ko/news/solana-foundation-expels-validators-for-sandwich-attacks-on-retail-users
+- https://www.cointelegraph.com/news/solana-removes-validators-sandwich-attacks
 
 ### Why This Matters for Track 02: Privacy Tooling
 
-The hackathon track asks us to:
 > *"Develop tools and infrastructure that make it easier for developers to build with privacy on Solana."*
 
 **The gap**: Before developers can BUILD privacy tools, users need to UNDERSTAND their current privacy state. You can't fix what you can't see.
@@ -134,49 +117,37 @@ The hackathon track asks us to:
 ECHO is a **real-time privacy analysis and visualization tool** that:
 
 1. **Diagnoses** — Analyzes any wallet's privacy exposure across 8 risk categories
-2. **Visualizes** — Renders transaction relationships as an interactive graph
+2. **Visualizes** — Renders transaction relationships as an interactive graph with **12 most relevant connections**
 3. **Quantifies** — Calculates a 0-100 privacy score using weighted risk algorithms
-4. **Educates** — Explains risks in plain language via AI-powered summaries
+4. **Educates** — Explains risks in plain language via AI-powered summaries (Gemini 2.5 Flash)
 5. **Simulates** — Shows how privacy techniques would improve your score
+6. **Detects MEV** — Identifies sandwich attacks, frontrunning, and extractive patterns
 
 ### 🏆 Unique Selling Points (USP)
 
 | Feature | ECHO | Other Tools |
 |---------|------|-------------|
 | **Multi-API Privacy Analysis** | ✅ Helius + Range + QuickNode + Gemini | ❌ Single source |
-| **MEV Pattern Detection** | ✅ Suspicious sandwich/frontrun patterns | ❌ Not available |
-| **Interactive Graph Visualization** | ✅ React Flow with risk coloring | ❌ Static tables |
-| **AI-Powered Explanations** | ✅ Gemini 2.5 Flash summaries | ❌ Technical jargon |
-| **Privacy Score Algorithm** | ✅ Weighted 8-category scoring | ❌ Binary pass/fail |
-| **"What If" Simulations** | ✅ ShadowWire stealth preview | ❌ No simulations |
+| **MEV Pattern Detection** | ✅ Sandwich/frontrun patterns with visual indicators | ❌ Not available |
+| **Interactive Graph Visualization** | ✅ React Flow with risk-colored nodes & edges | ❌ Static tables |
+| **Clickable Node Details** | ✅ Modal with risk explanation, confidence, transaction count | ❌ No details |
+| **AI-Powered Explanations** | ✅ Gemini 2.5 Flash natural language summaries | ❌ Technical jargon |
+| **Privacy Score Algorithm** | ✅ Weighted 8-category scoring (0-100) | ❌ Binary pass/fail |
+| **"What If" Simulations** | ✅ Privacy technique impact preview | ❌ No simulations |
 | **Sanctions/Compliance Check** | ✅ Range Protocol OFAC screening | ❌ Manual lookup |
+| **Real Transaction Data** | ✅ Actual transaction counts per address | ❌ Mock/placeholder |
 | **Open Source** | ✅ MIT Licensed | ❌ Proprietary |
-
-### 🥇 First-of-Its-Kind
-
-ECHO is the **FIRST** tool to combine:
-- Transaction graph analysis
-- MEV exposure detection
-- AI-generated privacy summaries
-- Stealth address simulation
-- Real-time compliance screening
-
-...into a single, unified privacy intelligence platform for Solana.
 
 ---
 
-## ⚠️ Mainnet Coming Soon
+## ⚠️ Current Status
 
 <p align="center">
   <img src="https://img.shields.io/badge/Status-Devnet%20Live-green?style=for-the-badge" alt="Devnet Live">
   <img src="https://img.shields.io/badge/Mainnet-Coming%20Q2%202026-blue?style=for-the-badge" alt="Mainnet Q2 2026">
 </p>
 
-Currently deployed on **Solana Devnet** for safe testing. Mainnet support is in development with additional safeguards:
-- Rate limiting to prevent API abuse
-- Warning modals for real-value analysis
-- Premium tier for heavy users
-- Collaboration with sponsor company for APIs
+Currently deployed on **Solana Devnet** for safe testing.
 
 ---
 
@@ -186,7 +157,7 @@ Currently deployed on **Solana Devnet** for safe testing. Mainnet support is in 
 
 **File**: `lib/privacy-engine.ts`
 
-Analyzes wallets across **8 risk categories**:
+The core engine analyzes wallets across **8 risk categories**:
 
 | Category | Detection Method | Why It Matters |
 |----------|-----------------|----------------|
@@ -205,7 +176,7 @@ Analyzes wallets across **8 risk categories**:
 Privacy Score = 100 - Σ(Risk Weight × Severity Multiplier)
 ```
 
-**Severity Multipliers** (Why these numbers?):
+**Severity Multipliers**:
 
 | Severity | Multiplier | Rationale |
 |----------|------------|-----------|
@@ -214,22 +185,14 @@ Privacy Score = 100 - Σ(Risk Weight × Severity Multiplier)
 | Medium | 8 | Moderate correlation risk (repeat interactions) |
 | Low | 3 | Minor fingerprinting (amount patterns) |
 
-**Example Calculation**:
-- Base score: 100
-- 1 Critical risk (exchange): -25
-- 2 High risks (temporal + MEV): -30
-- 1 Medium risk (repeats): -8
-- **Final Score: 37/100** (Poor privacy)
-
 #### Confidence Scoring
 
-Each risk includes a confidence percentage based on data quality:
+Each detected risk includes a confidence percentage based on actual transaction data:
 
 ```typescript
 confidence = Math.min(95, 40 + (transactionsWithPattern × 11))
 ```
 
-**Why 40 + 11?**
 - **40% base**: Minimum confidence with any detection
 - **11% per transaction**: Each additional pattern occurrence increases confidence
 - **95% cap**: Never claim 100% certainty (blockchain analysis has limits)
@@ -240,27 +203,28 @@ confidence = Math.min(95, 40 + (transactionsWithPattern × 11))
 
 **File**: `components/gossip-graph.tsx`
 
-Built with **React Flow** — chosen over alternatives because:
+Built with **React Flow** for a fully interactive deanonymization network:
 
-| Library | Why Not / Why Yes |
-|---------|-------------------|
-| D3.js | ❌ Lower-level, more boilerplate for interactivity |
-| Vis.js | ❌ Less React-native, harder state management |
-| Cytoscape | ❌ Steeper learning curve, overkill for our needs |
-| **React Flow** | ✅ React-native, built-in pan/zoom, custom nodes, great DX |
+#### Key Features:
+- **12 Most Relevant Connections**: Displays top 12 connected addresses for visual clarity (all addresses analyzed for scoring)
+- **Click Any Node**: Opens detailed modal with risk explanation
+- **Drag & Pan**: Full interactivity with zoom controls
+- **Live Edge Animation**: Animated connections showing transaction flow
+- **Risk-Colored Edges**: Green/Yellow/Red based on confidence level
 
 #### Node Types & Colors
 
 | Node Type | Color | Icon | Meaning |
 |-----------|-------|------|---------|
-| **Your Wallet** | Blue | 👤 | The analyzed address |
+| **Your Wallet** | Blue Ring | 👤 | The analyzed address (center) |
 | **Regular Wallet** | Gray | 💳 | Standard interaction |
 | **Exchange** | Red | 🏦 | KYC risk — identity link |
-| **Program** | Purple | ⚙️ | Smart contract interaction |
-| **MEV Bot** | Orange | 🤖 | Extractive actor |
-| **High Risk** | Red | ⚠️ | Flagged by Range Protocol |
+| **Program** | Purple | ⚙️ | Smart contract (System, Token, Jupiter, etc.) |
+| **MEV Bot** | Orange | 🤖 | Extractive actor detected |
 
-#### MEV Badges
+#### MEV Attack Badges
+
+When MEV is detected, nodes display attack type badges:
 
 | Badge | Attack Type | Description |
 |-------|-------------|-------------|
@@ -269,9 +233,51 @@ Built with **React Flow** — chosen over alternatives because:
 | 🔙 | Backrun | Bot executed immediately after your tx |
 | ⚡ | JIT | Just-in-time liquidity manipulation |
 
+#### Known Program Detection
+
+The graph automatically detects and labels known Solana programs:
+- `11111111111111111111111111111111` — System Program
+- `TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA` — Token Program
+- `ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL` — Associated Token Program
+- `metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s` — Metaplex
+- `JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4` — Jupiter
+- `whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc` — Orca Whirlpool
+- `9W959DqEETiGZocYWCQPaJ6sBmUzgfxXfqGeTEdp3aQP` — Raydium
+
 ---
 
-### 3. 🤖 AI-Powered Privacy Summaries
+### 3. 🔎 Node Detail Modal
+
+**File**: `components/node-detail-modal.tsx`
+
+Click any node in the graph to open a compact, informative modal:
+
+#### Information Displayed:
+- **Address**: Full address with copy-to-clipboard button
+- **Risk Level**: Low/Medium/High/Critical with color coding
+- **Confidence Score**: How certain the analysis is (based on transaction count)
+- **Transaction Count**: Real number of transactions with this address
+- **Node Type**: Wallet, Exchange, Program, or MEV Bot
+- **External Link**: Direct link to Solana Explorer
+
+#### Risk Level Explanations:
+
+| Level | Color | Description |
+|-------|-------|-------------|
+| **Low** | 🟢 Green | Minimal privacy concerns, safe interaction |
+| **Medium** | 🟡 Yellow | Some traceable patterns, consider privacy tools |
+| **High** | 🔴 Red | Significant deanonymization risk, minimize interactions |
+| **Critical** | 🔴 Red (pulsing) | Strong identity exposure, avoid further contact |
+
+#### Transparency Section:
+Each modal shows exactly how the confidence was calculated:
+- For your wallet: "Analyzed X total transactions from your wallet"
+- For connected addresses: "X direct transactions detected with this address"
+- Confidence is based on transaction frequency, not random data
+
+---
+
+### 4. 🤖 AI-Powered Privacy Summaries
 
 **File**: `lib/api/gemini.ts`
 
@@ -282,68 +288,59 @@ Uses **Google Gemini 2.5 Flash** for natural language explanations.
 | Model | Speed | Cost | Quality | Our Choice |
 |-------|-------|------|---------|------------|
 | GPT-4 | Slow | $$$ | Excellent | ❌ Too slow for real-time |
-| GPT-3.5 | Fast | $ | Good | ❌ Less nuanced explanations |
+| GPT-3.5 | Fast | $ | Good | ❌ Less nuanced |
 | Claude 3 | Medium | $$ | Excellent | ❌ Higher latency |
-| **Gemini 2.5 Flash** | ⚡ Fast | Free tier | Great | ✅ Best speed/quality/cost ratio |
+| **Gemini 2.5 Flash** | ⚡ Fast | Free tier | Great | ✅ Best speed/quality/cost |
 
-#### Prompt Engineering
-
-```typescript
-const systemPrompt = `You are a blockchain privacy expert. 
-Analyze this wallet's privacy risks and provide:
-1. A 2-sentence summary (plain English, no jargon)
-2. The single biggest risk they should address
-3. One actionable recommendation
-
-Be concise. Users are not technical.`;
-```
-
-**Why this prompt structure?**
-- **2 sentences**: Prevents information overload
-- **Biggest risk**: Prioritizes action
-- **Plain English**: Accessibility for non-technical users
+#### What AI Provides:
+- **2-Sentence Summary**: Plain English overview of privacy state
+- **Biggest Risk**: The single most important issue to address
+- **Actionable Recommendation**: One concrete step to improve privacy
+- **Privacy Assessment**: Categorized as Poor/Fair/Good/Excellent
 
 ---
 
-### 4. 🛡️ Privacy Simulation Panel
+### 5. 🛡️ Privacy Simulation Panel
 
 **File**: `components/simulation-panel.tsx`
 
-"What If?" scenarios showing how privacy techniques improve scores:
+"What If?" scenarios showing how privacy techniques would improve scores:
 
-| Technique | Score Impact | Implementation | Why This Number? |
-|-----------|--------------|----------------|------------------|
-| **ShadowWire Stealth** | +25 pts | Zero-knowledge transfers | Breaks direct links — highest impact |
-| **Address Rotation** | +20 pts | New address per tx | Prevents repeat interaction analysis |
-| **Timing Randomization** | +15 pts | 0-24hr random delays | Eliminates temporal patterns |
-| **Transaction Batching** | +12 pts | Combine 5-10 txs | Obscures amount correlation |
-| **Decoy Transactions** | +10 pts | Random noise txs | Increases anonymity set |
+| Technique | Score Impact | How It Helps |
+|-----------|--------------|--------------|
+| **Address Rotation** | +20 pts | New address per tx prevents pattern analysis |
+| **Timing Randomization** | +15 pts | Random delays eliminate temporal fingerprints |
+| **Transaction Batching** | +12 pts | Combine txs to obscure amount correlation |
+| **Decoy Transactions** | +10 pts | Noise txs increase anonymity set |
 
-**Score impact rationale**: Based on academic research on blockchain deanonymization. Techniques that break direct transaction links (stealth addresses) have more impact than those that add noise (decoys).
+Each simulation shows:
+- Current score vs. simulated score
+- Visual progress bar comparison
+- Detailed explanation of the technique
 
 ---
 
-### 5. 🎮 Gamification & Badges
+### 6. 🎮 Gamification & Badges
 
 **File**: `components/gamification-badges.tsx`
 
-Encourages privacy improvement through achievement badges:
+Achievement badges to encourage privacy improvement:
 
-| Badge | Requirement | Psychology |
-|-------|-------------|------------|
-| 🥷 Shadow Master | 90+ privacy score | Aspirational goal |
-| 👻 Ghost Mode | No critical risks | Risk awareness |
-| 🐋 Whale Watcher | 100+ transactions | Engagement reward |
-| 🎯 MEV Immune | No MEV exposure | Protection awareness |
-| 🌙 Night Owl | Transactions 12am-5am | Pattern recognition |
+| Badge | Requirement | Description |
+|-------|-------------|-------------|
+| 🥷 Shadow Master | 90+ privacy score | Peak privacy achieved |
+| 👻 Ghost Mode | No critical risks | Clean risk profile |
+| 🐋 Whale Watcher | 100+ transactions | Active trader |
+| 🎯 MEV Immune | No MEV exposure | Protected from extraction |
+| 🌙 Night Owl | Late-night transactions | Temporal diversity |
 
 ---
 
-### 6. 📋 Compliance Heatmap
+### 7. 📋 Compliance Heatmap
 
 **File**: `components/compliance-heatmap.tsx`
 
-Visual breakdown of risk distribution:
+Visual breakdown of risk distribution across categories:
 
 ```
 Identity    ████████░░  80%  ← Highest risk
@@ -354,52 +351,76 @@ Amount      █░░░░░░░░░  10%
 Network     █░░░░░░░░░  10%
 ```
 
+Color-coded bars show which risk categories need the most attention.
+
+---
+
+### 8. 📥 Export Panel
+
+**File**: `components/export-panel.tsx`
+
+Export your analysis results in multiple formats:
+
+| Format | Use Case |
+|--------|----------|
+| **JSON** | Programmatic processing, API integration |
+| **Markdown** | Documentation, reports, sharing |
+| **CSV** | Spreadsheet analysis, data processing |
+
+Exports include:
+- Full privacy score and breakdown
+- All detected risks with severity
+- Transaction count and unique interactions
+- AI summary and recommendations
+- Timestamp of analysis
+
+---
+
+### 9. 📟 API Logs Tab
+
+**File**: `components/analysis-sidebar.tsx` (Logs tab)
+
+Real-time visibility into API calls made during analysis:
+
+- **Helius API calls**: Transaction fetching, connected addresses
+- **Range Protocol calls**: Risk scoring, sanctions check
+- **QuickNode calls**: MEV detection
+- **Gemini AI calls**: Summary generation
+- **Response times**: Performance metrics for each call
+
 ---
 
 ## 🔌 Sponsor Integrations
 
-### Why We Chose Each Sponsor
-
-ECHO strategically integrates **5 sponsor technologies** to create a comprehensive privacy solution:
-
----
+ECHO integrates **4 sponsor technologies** for comprehensive privacy analysis:
 
 ### 1. 📡 Helius — Transaction Intelligence
 
 **Website**: [helius.dev](https://helius.dev)
 
 **What it provides**:
-- `getTransactionHistory()` — Full transaction history for any wallet
-- `getConnectedAddresses()` — All addresses that have interacted with a wallet
-- Enhanced transaction parsing with human-readable descriptions
+- Full transaction history for any Solana wallet
+- Connected addresses (all wallets that interacted)
+- Enhanced parsed transaction data
+- Token balances and transfers
 
-**Why Helius over alternatives?**
-
-| Provider | Transactions/sec | Parsed Data | Price | Our Choice |
-|----------|------------------|-------------|-------|------------|
-| Solana RPC | Limited | Raw only | Free | ❌ No parsing |
-| QuickNode | Good | Basic | $$ | ❌ Limited history |
-| **Helius** | Excellent | Enhanced | Free tier | ✅ Best for analysis |
-
-**Code Example**:
+**API Endpoints Used**:
 ```typescript
-// lib/api/helius.ts
-const transactions = await helius.getTransactionHistory({
-  address: walletAddress,
-  limit: 100
-});
+// Transaction history with enhanced parsing
+POST https://api.helius.xyz/v0/addresses/{address}/transactions
 
-// Returns enriched data:
-// - Human-readable descriptions
-// - Token transfer details
-// - Program interactions
-// - Timestamps with timezone
+// Connected addresses for graph building
+GET https://api.helius.xyz/v0/addresses/{address}/balances
+
+// Enhanced RPC
+https://devnet.helius-rpc.com/?api-key={API_KEY}
 ```
 
 **Integration Points**:
 - Privacy Engine: Fetches all transactions for risk analysis
 - Graph Builder: Extracts counterparty addresses for visualization
 - Temporal Analysis: Uses timestamps for pattern detection
+- Transaction Count: Real counts displayed in node modals
 
 ---
 
@@ -408,44 +429,27 @@ const transactions = await helius.getTransactionHistory({
 **Website**: [range.org](https://range.org)
 
 **What it provides**:
-- `getAddressRiskScore()` — 0-10 risk score with reasoning
-- `checkSanctions()` — OFAC sanctions list + token blacklist check
-- `assessTokenRisk()` — Scam/rugpull token detection
+- 0-10 risk score with detailed reasoning
+- OFAC sanctions list screening
+- Token blacklist checking
+- Malicious address detection
 
-**Why Range is critical**:
-
-| Capability | Without Range | With Range |
-|------------|--------------|------------|
-| Sanctions screening | Manual OFAC lookup | Real-time API check |
-| Risk reasoning | "High risk" (no context) | "Connected to mixer within 3 hops" |
-| Token safety | Unknown | Scam probability score |
-
-**Code Example**:
+**API Endpoints Used**:
 ```typescript
-// lib/api/range.ts
-const riskScore = await getAddressRiskScore(address);
-// Returns:
-// {
-//   riskScore: 7.2,
-//   riskLevel: "HIGH",
-//   numHops: 2,
-//   maliciousAddressesFound: [{ address, category: "mixer" }],
-//   reasoning: "2 hops from known Tornado Cash deposit"
-// }
+// Risk scoring with hop analysis
+POST https://api.range.org/platform/v1/risk/score/getAddressRiskScore
 
-const sanctions = await checkSanctions(address);
-// Returns:
-// {
-//   isOfacSanctioned: false,
-//   isTokenBlacklisted: false,
-//   attribution: { name: "Binance Hot Wallet", category: "exchange" }
-// }
+// Sanctions and blacklist check
+POST https://api.range.org/platform/v1/risk/score/checkSanctions
+
+// Token risk assessment
+POST https://api.range.org/platform/v1/risk/score/assessTokenRisk
 ```
 
-**Why these numbers matter**:
-- Risk score 0-3: Low risk (green in UI)
-- Risk score 4-6: Medium risk (yellow)
-- Risk score 7-10: High risk (red, triggers critical alert)
+**Risk Score Mapping**:
+- 0-3: Low risk (green in UI)
+- 4-6: Medium risk (yellow)
+- 7-10: High risk (red, triggers critical alert)
 
 ---
 
@@ -456,38 +460,16 @@ const sanctions = await checkSanctions(address);
 **What it provides**:
 - High-performance Solana RPC endpoint
 - Transaction-level MEV pattern detection
-- Real-time balance queries
+- Balance change analysis for sandwich detection
 
-**Why QuickNode for MEV?**
-
-MEV detection requires analyzing transaction ordering within blocks:
-
+**MEV Detection Logic**:
 ```typescript
-// lib/api/quicknode.ts
-function analyzeMEVPattern(tx: ParsedTransaction): MEVDetection {
-  const preBalances = tx.meta?.preBalances || [];
-  const postBalances = tx.meta?.postBalances || [];
-  
-  // Sandwich detection: Same address profits at start AND end
-  const firstChange = postBalances[0] - preBalances[0];
-  const lastChange = postBalances[n] - preBalances[n];
-  
-  if (firstChange > 0 && lastChange > 0 && sameAddress) {
-    return { isMEV: true, type: "sandwich", extractedValue: firstChange + lastChange };
-  }
-  
-  // Frontrun detection: Large balance gain before target tx
-  const largeGains = balanceChanges.filter(bc => bc.change > 1e9); // >1 SOL
-  if (largeGains.length > 0) {
-    return { isMEV: true, type: "frontrun", extractedValue: maxGain };
-  }
-}
-```
+// Sandwich detection: Same address profits at start AND end of block
+const isSandwich = firstAccountGain > 0 && lastAccountGain > 0 && sameAddress;
 
-**MEV Detection Thresholds**:
-- Sandwich confidence: 85% (strong pattern match)
-- Frontrun confidence: 70% (requires >1 SOL gain)
-- Why 1 SOL threshold? Filters noise from small arbitrage
+// Frontrun detection: Large balance gain before target tx
+const isFrontrun = balanceChangeBeforeTx > 1_000_000_000; // >1 SOL
+```
 
 ---
 
@@ -500,53 +482,12 @@ function analyzeMEVPattern(tx: ParsedTransaction): MEVDetection {
 - Personalized recommendations
 - Technical → Plain English translation
 
-**Why Gemini 2.5 Flash?**
-- **Speed**: ~500ms response time (critical for UX)
-- **Cost**: Free tier = 60 requests/minute
-- **Quality**: Understands blockchain context well
-
-**Prompt Engineering**:
+**API Endpoint**:
 ```typescript
-// lib/api/gemini.ts
-const prompt = `Analyze this Solana wallet's privacy:
-- Address: ${address}
-- Transactions: ${transactionCount}
-- Risks: ${risks.map(r => r.title).join(', ')}
-- Range Risk Score: ${rangeScore}/10
-
-Provide a brief, non-technical summary and one actionable recommendation.`;
+POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent
 ```
 
----
-
-### 5. 👻 Radr Labs ShadowWire — Stealth Transfers
-
-**Website**: [radr.network](https://radr.network)
-
-**What it provides**:
-- Zero-knowledge private transfers
-- Stealth address generation
-- Privacy pool balance checking
-
-**Integration Status**: 
-- ✅ Balance checking (server-side)
-- ✅ Transfer simulation
-- ⚠️ Full transfers require wallet connection (demo mode)
-
-**Code Example**:
-```typescript
-// lib/api/shadowwire.ts
-const balance = await getShadowWireBalance(address, "SOL");
-// Returns: { available: 1.5, poolAddress: "..." }
-
-const simulation = await simulatePrivateTransfer({
-  sender: address,
-  recipient: stealthAddress,
-  amount: 1.0,
-  token: "SOL"
-});
-// Returns: { possible: true, estimatedFee: 0.01 }
-```
+**Model**: `gemini-2.0-flash-exp` (optimized for speed)
 
 ---
 
@@ -558,15 +499,19 @@ const simulation = await simulatePrivateTransfer({
 ├─────────────────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────────┐ │
 │  │   Landing   │  │  Analysis   │  │    Graph    │  │     Sidebar     │ │
-│  │    Page     │→ │    Page     │→ │  (React     │← │  (Tabs: Risks,  │ │
-│  │  (Orb.tsx)  │  │ [address]   │  │    Flow)    │  │   AI, Simulate) │ │
+│  │    Page     │→ │    Page     │→ │  (React     │← │  (6 Tabs)       │ │
+│  │  (Orb.tsx)  │  │ [address]   │  │    Flow)    │  │                 │ │
 │  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────────┘ │
+│                                           ↓                              │
+│                              ┌─────────────────────┐                     │
+│                              │  Node Detail Modal  │                     │
+│                              │  (Click any node)   │                     │
+│                              └─────────────────────┘                     │
 └───────────────────────────┬─────────────────────────────────────────────┘
                             │
                    ┌────────▼────────┐
                    │  API Routes     │
                    │  /api/analyze   │
-                   │  /api/shadowwire│
                    └────────┬────────┘
                             │
               ┌─────────────▼─────────────┐
@@ -575,16 +520,25 @@ const simulation = await simulatePrivateTransfer({
               │   • Risk Detection         │
               │   • Score Calculation      │
               │   • Path Building          │
+              │   • Transaction Counting   │
               └─────────────┬──────────────┘
                             │
     ┌───────────┬───────────┼───────────┬───────────┐
     │           │           │           │           │
-┌───▼───┐  ┌────▼────┐  ┌───▼───┐  ┌────▼────┐  ┌───▼────┐
-│HELIUS │  │  RANGE  │  │QUICK  │  │ GEMINI  │  │SHADOW  │
-│       │  │PROTOCOL │  │ NODE  │  │   AI    │  │ WIRE   │
-│ Txs   │  │  Risk   │  │  MEV  │  │Summary  │  │Stealth │
-└───────┘  └─────────┘  └───────┘  └─────────┘  └────────┘
+┌───▼───┐  ┌────▼────┐  ┌───▼───┐  ┌────▼────┐
+│HELIUS │  │  RANGE  │  │QUICK  │  │ GEMINI  │
+│       │  │PROTOCOL │  │ NODE  │  │   AI    │
+│ Txs   │  │  Risk   │  │  MEV  │  │Summary  │
+└───────┘  └─────────┘  └───────┘  └─────────┘
 ```
+
+### Sidebar Tabs:
+1. **Overview** — Privacy score, risks, AI summary
+2. **Simulate** — "What if" privacy technique simulations
+3. **Heatmap** — Risk distribution visualization
+4. **Badges** — Gamification achievements
+5. **API Logs** — Real-time API call visibility
+6. **Export** — JSON/Markdown/CSV export
 
 ---
 
@@ -593,7 +547,7 @@ const simulation = await simulatePrivateTransfer({
 ### Prerequisites
 
 - **Node.js 18+** and npm
-- **API Keys** from sponsors (free tiers available)
+- **API Keys** from sponsors (all have free tiers)
 
 ### Installation
 
@@ -634,10 +588,10 @@ NEXT_PUBLIC_SOLANA_NETWORK=devnet
 
 | Service | Sign Up | Free Tier |
 |--------|---------|-----------|
-| [Helius](https://helius.dev) | ✅ Easy | 1,000,000 credits / month (Free plan) |
-| [Range](https://range.org) | ✅ Easy | 100 requests / month |
-| [QuickNode](https://quicknode.com) | ✅ Easy | ~10M API credits / month (Discover / Free tier) |
-| [Gemini AI](https://ai.google.dev) | ✅ Easy | Free tier with limited RPM & token quotas (varies by model) |
+| [Helius](https://helius.dev) | ✅ Easy | 1,000,000 credits/month |
+| [Range](https://range.org) | ✅ Easy | 100 requests/month |
+| [QuickNode](https://quicknode.com) | ✅ Easy | ~10M API credits/month |
+| [Gemini AI](https://ai.google.dev) | ✅ Easy | Free tier with RPM limits |
 
 ### Run Development Server
 
@@ -646,16 +600,6 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000)
-
-### Run Tests
-
-```bash
-# Install test dependencies
-pip install -r tests/requirements.txt
-
-# Run all tests (11 tests)
-pytest tests/test_api.py -v
-```
 
 ### Production Build
 
@@ -670,22 +614,25 @@ npm start
 
 ### Test Suite Overview
 
+**11 tests across 4 test classes:**
+
 | Test Class | Tests | Coverage |
 |------------|-------|----------|
-| `TestAnalyzeEndpoint` | 4 | API validation, response structure |
-| `TestShadowWireEndpoint` | 3 | Balance, simulation, errors |
-| `TestHealthCheck` | 2 | Endpoint availability |
+| `TestAnalyzeEndpoint` | 4 | API validation, response structure, error handling |
+| `TestShadowWireEndpoint` | 3 | Balance check, transfer simulation, invalid actions |
+| `TestHealthCheck` | 2 | Endpoint availability, homepage load |
 | `TestDataValidation` | 2 | Score ranges, severity values |
-
-**Total: 11 tests passing** ✅
 
 ### Run Tests
 
 ```bash
-# All tests
+# Install test dependencies
+pip install -r tests/requirements.txt
+
+# Run all tests
 pytest tests/test_api.py -v
 
-# Specific test class
+# Run specific test class
 pytest tests/test_api.py::TestAnalyzeEndpoint -v
 ```
 
@@ -705,51 +652,82 @@ DRpbCBMxVnDK7maPM5tGv6MvB3v1sRMC86PZ8okm21hy
 
 ```
 ECHO/
-├── app/                          # Next.js App Router
-│   ├── page.tsx                  # Landing page with Orb
-│   ├── layout.tsx                # Root layout
-│   ├── globals.css               # Tailwind styles
+├── app/                          # Next.js 16 App Router
+│   ├── page.tsx                  # Landing page with animated Orb
+│   ├── layout.tsx                # Root layout with providers
+│   ├── globals.css               # Tailwind CSS styles
 │   ├── analysis/
 │   │   └── [address]/
 │   │       └── page.tsx          # Analysis results page
 │   ├── api/
-│   │   ├── analyze/route.ts      # Privacy analysis endpoint
-│   │   └── shadowwire/route.ts   # Stealth transfer endpoint
+│   │   ├── analyze/route.ts      # Main privacy analysis endpoint
+│   │   └── shadowwire/route.ts   # ShadowWire integration endpoint
 │   └── components/
 │       └── providers.tsx         # React context providers
 ├── components/
-│   ├── ui/                       # shadcn/ui components
-│   ├── Orb.tsx                   # WebGL animated orb
-│   ├── analysis-sidebar.tsx      # Tabbed results panel
-│   ├── gossip-graph.tsx          # React Flow visualization
-│   ├── graph-nodes.tsx           # Custom node types
-│   ├── node-detail-modal.tsx     # Node click details
-│   ├── simulation-panel.tsx      # "What If?" simulator
-│   ├── stealth-demo.tsx          # ShadowWire demo
-│   ├── compliance-heatmap.tsx    # Risk breakdown
+│   ├── ui/                       # shadcn/ui components (button, input, etc.)
+│   ├── Orb.tsx                   # WebGL animated orb (landing page)
+│   ├── Orb.css                   # Orb styling
+│   ├── analysis-sidebar.tsx      # 6-tab results panel
+│   ├── gossip-graph.tsx          # React Flow graph visualization
+│   ├── graph-nodes.tsx           # Custom node type components
+│   ├── node-detail-modal.tsx     # Node click detail modal
+│   ├── simulation-panel.tsx      # "What If?" privacy simulator
+│   ├── compliance-heatmap.tsx    # Risk category breakdown
 │   ├── gamification-badges.tsx   # Achievement badges
 │   ├── terminal-header.tsx       # Floating status bar
 │   ├── wallet-input.tsx          # Address input form
-│   └── export-panel.tsx          # JSON/Markdown export
+│   └── export-panel.tsx          # JSON/Markdown/CSV export
 ├── lib/
-│   ├── privacy-engine.ts         # Core analysis logic
+│   ├── privacy-engine.ts         # Core analysis logic (441 lines)
 │   ├── api/
-│   │   ├── helius.ts             # Transaction fetching
-│   │   ├── range.ts              # Risk & sanctions
-│   │   ├── quicknode.ts          # MEV detection
-│   │   ├── gemini.ts             # AI summaries
-│   │   └── shadowwire.ts         # Stealth transfers
+│   │   ├── helius.ts             # Helius transaction fetching
+│   │   ├── range.ts              # Range risk & sanctions
+│   │   ├── quicknode.ts          # QuickNode MEV detection
+│   │   └── gemini.ts             # Gemini AI summaries
 │   ├── solana.ts                 # Solana utilities
 │   └── utils.ts                  # Helper functions
 ├── tests/
-│   ├── test_api.py               # Pytest integration tests
+│   ├── test_api.py               # 11 Pytest integration tests
 │   └── requirements.txt          # Test dependencies
 ├── public/                       # Static assets
 ├── .env.example                  # Environment template
-├── pytest.ini                    # Test configuration
+├── pytest.ini                    # Pytest configuration
 ├── next.config.ts                # Next.js configuration
-└── package.json                  # Dependencies
+├── tsconfig.json                 # TypeScript configuration
+├── tailwind.config.ts            # Tailwind CSS configuration
+└── package.json                  # Dependencies & scripts
 ```
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| **Next.js** | 16.0.10 | React framework with App Router |
+| **React** | 19.2.3 | UI library |
+| **TypeScript** | 5.x | Type safety |
+| **Tailwind CSS** | 4.x | Styling |
+| **React Flow** | 11.11.4 | Graph visualization |
+| **Framer Motion** | 12.26.2 | Animations |
+| **Lucide React** | 0.562.0 | Icons |
+| **OGL** | 1.0.11 | WebGL for Orb animation |
+
+### Backend / APIs
+| Service | Purpose |
+|---------|---------|
+| **Helius** | Transaction history, connected addresses |
+| **Range Protocol** | Risk scoring, OFAC sanctions |
+| **QuickNode** | High-performance RPC, MEV detection |
+| **Gemini AI** | Natural language summaries |
+
+### Testing
+| Technology | Purpose |
+|------------|---------|
+| **Pytest** | Python test framework |
+| **Requests** | HTTP client for API tests |
 
 ---
 
@@ -759,62 +737,68 @@ ECHO/
 
 | Issue | Cause | Solution |
 |-------|-------|----------|
-| `Range API rate limited` | >1000 requests/month | Uses built-in 60s cache |
+| `Range API rate limited` | >100 requests/month | Built-in 60s cache, wait or upgrade |
 | `Gemini 404 error` | Invalid API key | Regenerate at ai.google.dev |
-| `ShadowWire module error` | Client-side import | Use `/api/shadowwire` route |
 | `Empty graph` | Wallet has no history | Try different Devnet wallet |
-| `Duplicate API calls` | React Strict Mode | Fixed with AbortController |
+| `Transaction count shows 0` | New wallet | Wallet needs transaction history |
+| `CORS errors` | Local development | Use `npm run dev` (includes proxy) |
+
+### Test Wallet for Demo
+
+If you need a wallet with activity for testing:
+```
+DRpbCBMxVnDK7maPM5tGv6MvB3v1sRMC86PZ8okm21hy
+```
 
 ---
 
 ## 🗺️ Roadmap
 
 ### Phase 1: Hackathon (Current) ✅
-- [x] Privacy analysis engine
-- [x] Graph visualization
-- [x] AI summaries
-- [x] MEV detection
-- [x] Stealth demo
+- [x] Privacy analysis engine with 8 risk categories
+- [x] Interactive graph visualization (React Flow)
+- [x] Node detail modals with real transaction data
+- [x] AI-powered summaries (Gemini)
+- [x] MEV detection with visual indicators
+- [x] Privacy simulation panel
+- [x] Gamification badges
+- [x] Compliance heatmap
+- [x] Export functionality (JSON/Markdown/CSV)
 - [x] 11 passing tests
 
 ### Phase 2: Post-Hackathon (Q1 2026)
 - [ ] Mainnet support (with safeguards)
-- [ ] Wallet adapter integration
-- [ ] Real ShadowWire transfers
-- [ ] Historical tracking
+- [ ] Wallet adapter integration (Phantom, Solflare)
+- [ ] Privacy-preserving transfer integrations
+- [ ] Historical privacy score tracking
 
 ### Phase 3: Growth (Q2-Q3 2026)
 - [ ] Public API for developers
 - [ ] Browser extension
 - [ ] Telegram/Discord bot
-- [ ] Multi-chain support
+- [ ] Multi-chain support (Ethereum, Polygon)
 
 ---
 
-## 🤝 Contributing
+## 🎥 Demo
 
-We welcome contributions! ECHO is fully open source under the MIT license.
+### How to Use ECHO:
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
+1. **Visit the landing page** — See the animated Orb visualization
+2. **Enter any Solana address** — Devnet addresses work best for testing
+3. **Wait for analysis** — ~5-10 seconds for full analysis
+4. **Explore the graph** — Click and drag nodes, zoom in/out
+5. **Click any node** — See detailed risk explanation
+6. **Check sidebar tabs** — Overview, Simulate, Heatmap, Badges, Logs, Export
 
-### Quick Start
+### Sample Addresses for Testing:
 
 ```bash
-# Fork and clone
-git clone https://github.com/Shawnchee/ECHO.git
+# Active Devnet wallet (recommended)
+DRpbCBMxVnDK7maPM5tGv6MvB3v1sRMC86PZ8okm21hy
 
-# Create feature branch
-git checkout -b feature/amazing-feature
-
-# Make changes and test
-npm run dev
-pytest tests/test_api.py -v
-
-# Commit with conventional commits
-git commit -m "feat: add amazing feature"
-
-# Push and create PR
-git push origin feature/amazing-feature
+# System Program (edge case)
+11111111111111111111111111111111
 ```
 
 ---
@@ -843,16 +827,12 @@ Built with support from hackathon sponsors:
 | **Helius** | Transaction indexing & connected addresses API |
 | **Range Protocol** | Risk scoring & compliance screening |
 | **QuickNode** | High-performance RPC & MEV detection |
-| **Radr Labs** | ShadowWire stealth transfer SDK |
-
-Special thanks to **Solana Privacy Hackathon** for organizing this hackathon.
+| **Google** | Gemini AI for privacy summaries |
 
 ---
 
 <p align="center">
-  <strong>Making blockchain privacy risks visible and actionable.</strong>
-</p>
-
-<p align="center">
-  Built with 💙 for Solana Privacy Hackathon | Track 02: Privacy Tooling
+  <strong>🔮 ECHO — Making the Invisible Visible</strong>
+  <br>
+  <em>Because privacy isn't about hiding. It's about choosing what to reveal.</em>
 </p>

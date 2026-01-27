@@ -22,7 +22,6 @@ import {
 } from "lucide-react";
 import type { WalletAnalysis } from "@/lib/privacy-engine";
 import { SimulationPanel } from "./simulation-panel";
-import { StealthDemo } from "./stealth-demo";
 import { ComplianceHeatmap } from "./compliance-heatmap";
 import { ExportPanel } from "./export-panel";
 import { GamificationBadges } from "./gamification-badges";
@@ -34,7 +33,7 @@ interface AnalysisSidebarProps {
 
 export function AnalysisSidebar({ address, analysis }: AnalysisSidebarProps) {
   const [expandedRisk, setExpandedRisk] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<"overview" | "simulation" | "stealth" | "heatmap" | "export" | "badges" | "logs">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "simulation" | "heatmap" | "export" | "badges" | "logs">("overview");
 
   const privacyScore = analysis?.privacyScore ?? 0;
   const transactionCount = analysis?.transactionCount ?? 0;
@@ -53,7 +52,7 @@ export function AnalysisSidebar({ address, analysis }: AnalysisSidebarProps) {
   const tabs = [
     { id: "overview" as const, icon: Shield, label: "Overview" },
     { id: "simulation" as const, icon: Play, label: "Simulate" },
-    { id: "stealth" as const, icon: Eye, label: "Stealth" },
+
     { id: "heatmap" as const, icon: Map, label: "Heatmap" },
     { id: "badges" as const, icon: Trophy, label: "Badges" },
     { id: "logs" as const, icon: Terminal, label: "API Logs" },
@@ -251,7 +250,7 @@ export function AnalysisSidebar({ address, analysis }: AnalysisSidebarProps) {
                             {risk.severity}
                           </span>
                           <span className="text-xs text-gray-400 font-mono">
-                            {risk.confidence}% confidence
+                            {risk.confidence.toFixed(2)}% confidence
                           </span>
                         </div>
                         
@@ -368,18 +367,6 @@ export function AnalysisSidebar({ address, analysis }: AnalysisSidebarProps) {
               exit={{ opacity: 0, x: 20 }}
             >
               <SimulationPanel analysis={analysis ?? null} />
-            </motion.div>
-          )}
-
-          {/* Stealth Tab */}
-          {activeTab === "stealth" && (
-            <motion.div
-              key="stealth"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-            >
-              <StealthDemo walletAddress={address} />
             </motion.div>
           )}
 

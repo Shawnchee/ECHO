@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect, useState, useRef, useCallback } from "react";
+import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { ArrowLeft, Loader2, RefreshCw } from "lucide-react";
@@ -13,87 +13,52 @@ interface AnalysisPageProps {
   params: Promise<{ address: string }>;
 }
 
-const MAX_RETRIES = 3;
-const RETRY_DELAY = 1500;
-
 export default function AnalysisPage({ params }: AnalysisPageProps) {
   const { address } = use(params);
   const router = useRouter();
   const [analysis, setAnalysis] = useState<WalletAnalysis | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [retryCount, setRetryCount] = useState(0);
   const [loadingStep, setLoadingStep] = useState(0);
-  
-  const abortControllerRef = useRef<AbortController | null>(null);
-  const hasFetchedRef = useRef(false);
 
-  const fetchAnalysis = useCallback(async (retry = 0) => {
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-    abortControllerRef.current = new AbortController();
+  const fetchAnalysis = async () => {
+    setLoading(true);
+    setError(null);
+    setLoadingStep(0);
+
+    // Progress animation (8 seconds total: 5 steps × 1.6s)
+    const stepInterval = setInterval(() => {
+      setLoadingStep(prev => Math.min(prev + 1, 4));
+    }, 1600);
 
     try {
-      setLoading(true);
-      setError(null);
-      setLoadingStep(0);
-
-      const stepInterval = setInterval(() => {
-        setLoadingStep(prev => Math.min(prev + 1, 4));
-      }, 800);
-
       const response = await fetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ address }),
-        signal: abortControllerRef.current.signal,
       });
 
       clearInterval(stepInterval);
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || "Analysis failed");
       }
 
       const data = await response.json();
       setAnalysis(data);
-      setRetryCount(0);
     } catch (err: any) {
-      if (err.name === 'AbortError') return;
-      
       console.error("Analysis error:", err);
-      
-      if (retry < MAX_RETRIES) {
-        setRetryCount(retry + 1);
-        setTimeout(() => fetchAnalysis(retry + 1), RETRY_DELAY);
-      } else {
-        setError(err.message || "Failed to analyze wallet");
-      }
+      setError(err.message || "Failed to analyze wallet");
     } finally {
+      clearInterval(stepInterval);
       setLoading(false);
     }
-  }, [address]);
+  };
 
   useEffect(() => {
-    if (hasFetchedRef.current) return;
-    hasFetchedRef.current = true;
-    
     fetchAnalysis();
-
-    return () => {
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
-    };
-  }, [fetchAnalysis]);
-
-  const handleRetry = () => {
-    hasFetchedRef.current = false;
-    setRetryCount(0);
-    fetchAnalysis();
-  };
+  }, [address]);
 
   const loadingSteps = [
     { text: "Fetching transactions from Helius...", active: loadingStep >= 0 },
@@ -123,9 +88,7 @@ export default function AnalysisPage({ params }: AnalysisPageProps) {
           <div className="text-center space-y-4">
             <Loader2 className="h-16 w-16 animate-spin text-blue-400 mx-auto" />
             <div className="space-y-2">
-              <p className="text-xl font-mono text-blue-400">
-                {retryCount > 0 ? `Retrying... (${retryCount}/${MAX_RETRIES})` : "Analyzing wallet..."}
-              </p>
+              <p className="text-xl font-mono text-blue-400">Analyzing wallet...</p>
               <div className="text-sm font-mono text-gray-400 space-y-1">
                 {loadingSteps.map((step, i) => (
                   <p key={i} className={step.active ? "text-blue-400" : "text-gray-600"}>
@@ -139,7 +102,7 @@ export default function AnalysisPage({ params }: AnalysisPageProps) {
       )}
 
       {/* Error State */}
-      {error && (
+      {error && !loading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
           <div className="max-w-md p-8 bg-red-900/20 border-2 border-red-500/30 rounded-2xl text-center space-y-4">
             <div className="text-red-400 text-5xl">⚠️</div>
@@ -147,7 +110,7 @@ export default function AnalysisPage({ params }: AnalysisPageProps) {
             <p className="text-gray-300">{error}</p>
             <div className="flex gap-3 justify-center">
               <Button
-                onClick={handleRetry}
+                onClick={() => fetchAnalysis()}
                 variant="outline"
                 className="border-blue-500/30 text-blue-400 hover:bg-blue-500/10"
               >
@@ -165,22 +128,6 @@ export default function AnalysisPage({ params }: AnalysisPageProps) {
             </div>
           </div>
         </div>
-      )}
-
-      {/* Skeleton Loading State */}
-      {!analysis && !loading && !error && (
-        <main className="relative z-10 pt-32 pb-8 px-6">
-          <div className="max-w-[1800px] mx-auto">
-            <div className="mb-6 space-y-4">
-              <div className="h-10 w-96 bg-blue-500/10 rounded animate-pulse" />
-              <div className="h-6 w-64 bg-blue-500/10 rounded animate-pulse" />
-            </div>
-            <div className="grid lg:grid-cols-[1fr,400px] gap-6">
-              <div className="h-[calc(100vh-280px)] min-h-[600px] rounded-2xl border-2 border-blue-500/20 bg-black/40 animate-pulse" />
-              <div className="h-[calc(100vh-280px)] min-h-[600px] rounded-2xl border-2 border-blue-500/20 bg-black/40 animate-pulse" />
-            </div>
-          </div>
-        </main>
       )}
 
       {/* Main Content */}

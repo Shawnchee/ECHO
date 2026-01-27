@@ -24,6 +24,7 @@ export interface DeanonymizationPath {
     address: string;
     type: "wallet" | "exchange" | "program";
     risk: "low" | "medium" | "high" | "critical";
+    transactionCount?: number;
   }>;
   edges: Array<{
     from: string;
@@ -148,7 +149,7 @@ async function detectPrivacyRisks(
         exchangeAddresses
       ),
       recommendation:
-        "Use intermediate wallets or privacy protocols (ShadowWire) to break the link between your identity and on-chain activity.",
+        "Use intermediate wallets or privacy-preserving protocols to break the link between your identity and on-chain activity.",
       category: "identity",
     });
   }
@@ -398,7 +399,7 @@ async function buildDeanonymizationPaths(
     return paths;
   }
 
-  const firstHop = Array.from(connectedAddresses).slice(0, 8);
+  const firstHop = Array.from(connectedAddresses).slice(0, 12);
 
   const KNOWN_PROGRAMS = new Set([
     "11111111111111111111111111111111",
@@ -428,8 +429,8 @@ async function buildDeanonymizationPaths(
 
     paths.push({
       nodes: [
-        { address, type: "wallet", risk: "medium" },
-        { address: hop1, type: nodeType, risk: riskLevel },
+        { address, type: "wallet", risk: "medium", transactionCount: transactions.length },
+        { address: hop1, type: nodeType, risk: riskLevel, transactionCount: txCountWithAddress },
       ],
       edges: [{ from: address, to: hop1, confidence }],
     });
