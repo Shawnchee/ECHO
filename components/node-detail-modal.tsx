@@ -23,7 +23,7 @@ interface NodeDetailModalProps {
   mainAddress: string;
 }
 
-// Risk level explanations
+// Risk level explanations with detailed recommendations
 const riskExplanations = {
   low: {
     title: "Low Risk",
@@ -34,6 +34,15 @@ const riskExplanations = {
       "Standard wallet activity detected",
       "No known associations with tracking services",
       "Low transaction correlation risk",
+    ],
+    risks: [
+      "General on-chain visibility (all transactions are public)",
+      "Potential future analysis if blockchain analytics improve",
+    ],
+    recommendations: [
+      "Continue normal operations - this connection is safe",
+      "Monitor for any changes in the address's risk profile",
+      "Consider using ShadowWire for high-value transactions regardless",
     ],
   },
   medium: {
@@ -46,6 +55,17 @@ const riskExplanations = {
       "Some interactions may be traceable",
       "Consider using privacy-enhancing tools",
     ],
+    risks: [
+      "Transaction pattern analysis possible",
+      "Timing correlations may reveal activity windows",
+      "Amount fingerprinting could link transactions",
+    ],
+    recommendations: [
+      "Use ShadowWire for future transactions with this address",
+      "Randomize transaction timing to break temporal patterns",
+      "Consider batching transactions to obscure amounts",
+      "Use address rotation for repeat interactions",
+    ],
   },
   high: {
     title: "High Risk",
@@ -57,6 +77,19 @@ const riskExplanations = {
       "Possible KYC exchange or tracking service",
       "Transactions may be easily linked to your wallet",
     ],
+    risks: [
+      "Direct KYC linkage through exchange records",
+      "Blockchain analysis firms actively tracking this address",
+      "Government/regulatory access to transaction data",
+      "Your real identity may already be associated",
+    ],
+    recommendations: [
+      "Minimize further interactions with this address",
+      "Use intermediate wallets with no prior history",
+      "Route ALL transactions through ShadowWire",
+      "Consider using decoy transactions to confuse analysis",
+      "Avoid time-sensitive transactions that reveal timezone",
+    ],
   },
   critical: {
     title: "Critical Risk",
@@ -67,6 +100,19 @@ const riskExplanations = {
       "Direct link to KYC/identity verification",
       "Known tracking or surveillance address",
       "High probability of deanonymization",
+    ],
+    risks: [
+      "Your identity is likely already compromised through this link",
+      "All historical transactions may be traced to you",
+      "Future transactions will be monitored",
+      "Potential legal/compliance implications",
+    ],
+    recommendations: [
+      "STOP all direct interactions immediately",
+      "Create new wallets with no connection to this address",
+      "Use multi-hop routing through ShadowWire",
+      "Consider your operational security compromised",
+      "Use fresh addresses for all future activity",
     ],
   },
 };
@@ -133,182 +179,118 @@ export function NodeDetailModal({ isOpen, onClose, node, mainAddress }: NodeDeta
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
           />
 
-          {/* Modal */}
+          {/* Modal - Compact */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-md"
+            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[60] w-[95vw] max-w-lg"
           >
-            <div className="bg-gray-900/95 border-2 border-blue-500/30 rounded-2xl shadow-2xl shadow-blue-500/10 overflow-hidden max-h-[80vh] flex flex-col">
+            <div className="bg-gray-900/95 border-2 border-blue-500/30 rounded-xl shadow-2xl shadow-blue-500/10 overflow-hidden">
               {/* Header */}
               <div className={`
-                px-4 py-3 border-b border-blue-500/20 flex-shrink-0
+                px-4 py-2 border-b border-blue-500/20 flex-shrink-0
                 ${riskInfo.color === 'green' ? 'bg-green-500/10' : ''}
                 ${riskInfo.color === 'yellow' ? 'bg-yellow-500/10' : ''}
                 ${riskInfo.color === 'red' ? 'bg-red-500/10' : ''}
               `}>
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className={`
-                      p-2 rounded-lg
-                      ${riskInfo.color === 'green' ? 'bg-green-500/20' : ''}
-                      ${riskInfo.color === 'yellow' ? 'bg-yellow-500/20' : ''}
-                      ${riskInfo.color === 'red' ? 'bg-red-500/20' : ''}
-                    `}>
-                      <RiskIcon className={`h-5 w-5
-                        ${riskInfo.color === 'green' ? 'text-green-400' : ''}
-                        ${riskInfo.color === 'yellow' ? 'text-yellow-400' : ''}
-                        ${riskInfo.color === 'red' ? 'text-red-400' : ''}
-                      `} />
-                    </div>
+                  <div className="flex items-center gap-2">
+                    <RiskIcon className={`h-5 w-5
+                      ${riskInfo.color === 'green' ? 'text-green-400' : ''}
+                      ${riskInfo.color === 'yellow' ? 'text-yellow-400' : ''}
+                      ${riskInfo.color === 'red' ? 'text-red-400' : ''}
+                    `} />
                     <div>
-                      <h3 className="text-lg font-bold text-white">{riskInfo.title}</h3>
-                      <p className="text-sm text-gray-400">{typeInfo.title}</p>
+                      <h3 className="text-base font-bold text-white">{riskInfo.title}</h3>
+                      <p className="text-xs text-gray-400">{typeInfo.title}</p>
                     </div>
                   </div>
-                  <button
-                    onClick={onClose}
-                    className="p-2 rounded-lg hover:bg-white/10 transition-colors"
-                  >
-                    <X className="h-5 w-5 text-gray-400" />
+                  <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-white/10 transition-colors">
+                    <X className="h-4 w-4 text-gray-400" />
                   </button>
                 </div>
               </div>
 
-              {/* Content */}
-              <div className="p-4 space-y-4 overflow-y-auto flex-1">
+              {/* Content - Compact */}
+              <div className="p-3 space-y-3">
                 {/* Address */}
-                <div className="space-y-2">
-                  <label className="text-xs font-mono text-gray-500 uppercase tracking-wider">Address</label>
-                  <div className="flex items-center gap-2 bg-black/40 rounded-lg p-3 border border-blue-500/20">
-                    <code className="flex-1 text-sm font-mono text-blue-400 break-all">
-                      {node.address}
-                    </code>
-                    <div className="flex gap-1">
-                      <button
-                        onClick={copyAddress}
-                        className="p-2 rounded hover:bg-white/10 transition-colors"
-                        title="Copy address"
-                      >
-                        {copied ? (
-                          <Check className="h-4 w-4 text-blue-400" />
-                        ) : (
-                          <Copy className="h-4 w-4 text-gray-400" />
-                        )}
-                      </button>
-                      <button
-                        onClick={openExplorer}
-                        className="p-2 rounded hover:bg-white/10 transition-colors"
-                        title="View on Solana Explorer"
-                      >
-                        <ExternalLink className="h-4 w-4 text-gray-400" />
-                      </button>
-                    </div>
+                <div className="flex items-center gap-2 bg-black/40 rounded-lg p-2 border border-blue-500/20">
+                  <code className="flex-1 text-xs font-mono text-blue-400 truncate">
+                    {node.address}
+                  </code>
+                  <button onClick={copyAddress} className="p-1.5 rounded hover:bg-white/10" title="Copy">
+                    {copied ? <Check className="h-3.5 w-3.5 text-green-400" /> : <Copy className="h-3.5 w-3.5 text-gray-400" />}
+                  </button>
+                  <button onClick={openExplorer} className="p-1.5 rounded hover:bg-white/10" title="Explorer">
+                    <ExternalLink className="h-3.5 w-3.5 text-gray-400" />
+                  </button>
+                </div>
+
+                {/* Risk + Confidence Row */}
+                <div className="grid grid-cols-2 gap-2">
+                  <div className={`rounded-lg p-2 border ${riskInfo.color === 'green' ? 'bg-green-500/10 border-green-500/30' : ''} ${riskInfo.color === 'yellow' ? 'bg-yellow-500/10 border-yellow-500/30' : ''} ${riskInfo.color === 'red' ? 'bg-red-500/10 border-red-500/30' : ''}`}>
+                    <span className="text-[10px] text-gray-500 uppercase">Risk Level</span>
+                    <p className={`text-sm font-bold ${riskInfo.color === 'green' ? 'text-green-400' : ''} ${riskInfo.color === 'yellow' ? 'text-yellow-400' : ''} ${riskInfo.color === 'red' ? 'text-red-400' : ''}`}>
+                      {riskInfo.title}
+                    </p>
                   </div>
+                  {!node.isMain && (
+                    <div className="bg-black/40 rounded-lg p-2 border border-blue-500/20">
+                      <span className="text-[10px] text-gray-500 uppercase">Confidence</span>
+                      <p className="text-sm font-bold text-white">{node.confidence || 60}%</p>
+                    </div>
+                  )}
                   {node.isMain && (
-                    <span className="inline-block px-2 py-1 text-xs font-mono bg-blue-500/20 text-blue-400 rounded">
-                      YOUR WALLET
-                    </span>
+                    <div className="bg-blue-500/10 rounded-lg p-2 border border-blue-500/30">
+                      <span className="text-[10px] text-gray-500 uppercase">Status</span>
+                      <p className="text-sm font-bold text-blue-400">Your Wallet</p>
+                    </div>
                   )}
                 </div>
 
-                {/* Risk Explanation */}
-                <div className="space-y-2">
-                  <label className="text-xs font-mono text-gray-500 uppercase tracking-wider">Risk Analysis</label>
-                  <p className="text-sm text-gray-300">{riskInfo.description}</p>
-                  
-                  <div className="space-y-1">
-                    {riskInfo.implications.map((implication, i) => (
-                      <div key={i} className="flex items-start gap-2">
-                        <span className={`mt-1.5 h-1.5 w-1.5 rounded-full flex-shrink-0
-                          ${riskInfo.color === 'green' ? 'bg-green-400' : ''}
-                          ${riskInfo.color === 'yellow' ? 'bg-yellow-400' : ''}
-                          ${riskInfo.color === 'red' ? 'bg-red-400' : ''}
-                        `} />
-                        <span className="text-sm text-gray-400">{implication}</span>
-                      </div>
+                {/* Interaction Summary - Detailed Transparency */}
+                <div className="bg-gray-800/40 rounded-lg p-2 border border-gray-600/20">
+                  <div className="space-y-0.5">
+                    <p className="text-[10px] text-gray-400">
+                      {!node.isMain ? (
+                        <><span className="text-blue-400 font-semibold">{node.transactionCount || 0}</span> direct transactions detected with this address</>
+                      ) : (
+                        <>Analyzed <span className="text-blue-400 font-semibold">{node.transactionCount || 0}</span> total transactions from your wallet</>
+                      )}
+                    </p>
+                    <p className="text-[10px] text-gray-500">
+                      {!node.isMain ? (
+                        <>Risk assessment: {node.confidence > 80 ? 'High frequency + known exchange patterns' : node.confidence > 50 ? 'Multiple repeated interactions found' : 'Low correlation with identity exposure'} ({node.confidence?.toFixed(0)}% confidence)</>
+                      ) : (
+                        <>Privacy calculated using transaction graph analysis, temporal patterns, and compliance checks</>
+                      )}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Key Risks - Only first 2 */}
+                <div className={`rounded-lg p-2 border ${riskInfo.color === 'green' ? 'bg-green-500/5 border-green-500/20' : ''} ${riskInfo.color === 'yellow' ? 'bg-yellow-500/5 border-yellow-500/20' : ''} ${riskInfo.color === 'red' ? 'bg-red-500/5 border-red-500/20' : ''}`}>
+                  <span className="text-[10px] text-gray-500 uppercase">Key Risks</span>
+                  <div className="mt-1 space-y-0.5">
+                    {riskInfo.risks.slice(0, 2).map((risk, i) => (
+                      <p key={i} className="text-xs text-gray-300">• {risk}</p>
                     ))}
                   </div>
                 </div>
 
-                {/* Type Explanation */}
-                <div className="space-y-2">
-                  <label className="text-xs font-mono text-gray-500 uppercase tracking-wider">Address Type</label>
-                  <div className="flex items-start gap-2 bg-black/40 rounded-lg p-3 border border-blue-500/20">
-                    <TypeIcon className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0" />
-                    <p className="text-xs text-gray-300">{typeInfo.description}</p>
-                  </div>
-                </div>
-
-                {/* Connection Info */}
-                {!node.isMain && (
-                  <div className="space-y-2">
-                    <label className="text-xs font-mono text-gray-500 uppercase tracking-wider">Connection Details</label>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="bg-black/40 rounded-lg p-3 border border-blue-500/20">
-                        <div className="flex items-center gap-2 mb-1">
-                          <TrendingUp className="h-4 w-4 text-blue-400" />
-                          <span className="text-xs text-gray-500">Confidence</span>
-                        </div>
-                        <span className="text-lg font-bold text-white">{node.confidence || 60}%</span>
-                      </div>
-                      <div className="bg-black/40 rounded-lg p-3 border border-blue-500/20">
-                        <div className="flex items-center gap-2 mb-1">
-                          <Users className="h-4 w-4 text-blue-400" />
-                          <span className="text-xs text-gray-500">Relationship</span>
-                        </div>
-                        <span className="text-sm font-medium text-white">Direct Link</span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Recommendations */}
-                <div className="space-y-2">
-                  <label className="text-xs font-mono text-gray-500 uppercase tracking-wider">Recommendations</label>
-                  <div className={`rounded-lg p-3 border text-xs
-                    ${riskInfo.color === 'green' ? 'bg-green-500/5 border-green-500/20' : ''}
-                    ${riskInfo.color === 'yellow' ? 'bg-yellow-500/5 border-yellow-500/20' : ''}
-                    ${riskInfo.color === 'red' ? 'bg-red-500/5 border-red-500/20' : ''}
-                  `}>
-                    {node.riskLevel === 'low' && (
-                      <p className="text-sm text-gray-300">
-                        ✅ This connection appears safe. Continue normal operations.
-                      </p>
-                    )}
-                    {node.riskLevel === 'medium' && (
-                      <p className="text-sm text-gray-300">
-                        ⚠️ Consider using privacy tools like ShadowWire for future transactions with this address.
-                      </p>
-                    )}
-                    {(node.riskLevel === 'high' || node.riskLevel === 'critical') && (
-                      <p className="text-sm text-gray-300">
-                        🚨 Minimize interactions with this address. Use tumbling services or stealth addresses for any necessary transactions.
-                      </p>
-                    )}
-                  </div>
+                {/* Top Recommendation */}
+                <div className={`rounded-lg p-2 border ${riskInfo.color === 'green' ? 'bg-green-500/5 border-green-500/20' : ''} ${riskInfo.color === 'yellow' ? 'bg-yellow-500/5 border-yellow-500/20' : ''} ${riskInfo.color === 'red' ? 'bg-red-500/5 border-red-500/20' : ''}`}>
+                  <span className="text-[10px] text-gray-500 uppercase">💡 Recommendation</span>
+                  <p className="text-xs text-gray-300 mt-1">{riskInfo.recommendations[0]}</p>
                 </div>
               </div>
 
-              {/* Footer */}
-              <div className="px-4 py-3 border-t border-blue-500/20 bg-black/40 flex-shrink-0">
-                <div className="flex gap-2">
-                  <Button
-                    onClick={openExplorer}
-                    variant="outline"
-                    className="flex-1 border-blue-500/30 text-blue-400 hover:bg-blue-500/10"
-                  >
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    View on Explorer
-                  </Button>
-                  <Button
-                    onClick={onClose}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
-                  >
-                    Close
-                  </Button>
-                </div>
+              {/* Footer - Compact */}
+              <div className="px-3 py-2 border-t border-blue-500/20 bg-black/40">
+                <Button onClick={onClose} className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm h-8">
+                  Close
+                </Button>
               </div>
             </div>
           </motion.div>

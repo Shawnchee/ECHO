@@ -204,108 +204,73 @@ export function GamificationBadges({ analysis }: GamificationBadgesProps) {
       animate={{ opacity: 1, y: 0 }}
       className="space-y-4"
     >
-      {/* Earned Badges */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <h3 className="text-sm font-mono text-blue-400">
-            🏆 Earned Badges ({earnedBadges.length})
-          </h3>
-        </div>
-        
-        <div className="grid grid-cols-3 gap-2">
-          {earnedBadges.slice(0, 6).map((badge, index) => (
-            <motion.div
-              key={badge.id}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.1 }}
-              className={`relative group p-3 rounded-xl border bg-gradient-to-br ${rarityColors[badge.rarity]} bg-opacity-10 ${rarityBorders[badge.rarity]} hover:scale-105 transition-transform cursor-pointer`}
-            >
-              <div className="text-center">
-                <span className="text-2xl">{badge.emoji}</span>
-                <div className="text-xs font-mono text-white mt-1 truncate">
-                  {badge.name}
-                </div>
-                <div className={`text-[10px] uppercase tracking-wider mt-0.5 ${
-                  badge.rarity === 'legendary' ? 'text-yellow-400' :
-                  badge.rarity === 'epic' ? 'text-purple-400' :
-                  badge.rarity === 'rare' ? 'text-blue-400' : 'text-gray-400'
-                }`}>
-                  {badge.rarity}
-                </div>
-              </div>
-              
-              {/* Tooltip */}
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-black/95 rounded-lg border border-blue-500/30 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
-                <p className="text-xs text-white font-bold">{badge.name}</p>
-                <p className="text-xs text-gray-400 mt-1">{badge.description}</p>
-                <p className="text-xs text-blue-400 mt-1 font-mono">{badge.condition}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-        
-        {earnedBadges.length > 6 && (
-          <div className="text-center">
-            <span className="text-xs text-gray-500">+{earnedBadges.length - 6} more badges</span>
-          </div>
-        )}
+      {/* How Badges Work */}
+      <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4">
+        <h3 className="text-sm font-mono text-blue-400 font-bold mb-2">🏆 How Badges Work</h3>
+        <p className="text-xs text-gray-400 leading-relaxed">
+          Badges are earned based on your wallet's privacy behavior. They help you understand 
+          your privacy strengths and areas for improvement. Here's how you can earn them:
+        </p>
       </div>
 
-      {/* Locked Badges */}
-      <div className="space-y-2">
-        <h3 className="text-sm font-mono text-gray-500">
-          🔒 Locked Badges ({unearnedBadges.length})
-        </h3>
-        
-        <div className="grid grid-cols-4 gap-1">
-          {unearnedBadges.slice(0, 8).map((badge) => (
+      {/* Badge Categories */}
+      <div className="space-y-3">
+        <div className="bg-black/40 border border-gray-700 rounded-lg p-3">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-lg">🛡️</span>
+            <span className="text-sm font-mono text-white font-bold">Privacy Score Badges</span>
+          </div>
+          <div className="text-xs text-gray-400 space-y-1">
+            <p>• <span className="text-yellow-400">Shadow Master</span> - Achieve 90+ privacy score</p>
+            <p>• <span className="text-purple-400">Privacy Pro</span> - Maintain 70+ privacy score</p>
+            <p>• <span className="text-blue-400">Cautious Trader</span> - Score between 50-69</p>
+          </div>
+        </div>
+
+        <div className="bg-black/40 border border-gray-700 rounded-lg p-3">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-lg">👻</span>
+            <span className="text-sm font-mono text-white font-bold">Risk Avoidance Badges</span>
+          </div>
+          <div className="text-xs text-gray-400 space-y-1">
+            <p>• <span className="text-green-400">Ghost Mode</span> - No critical risks detected</p>
+            <p>• <span className="text-cyan-400">Clean Slate</span> - Zero risks at all</p>
+            <p>• <span className="text-purple-400">MEV Immune</span> - No MEV exposure</p>
+          </div>
+        </div>
+
+        <div className="bg-black/40 border border-gray-700 rounded-lg p-3">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-lg">🎲</span>
+            <span className="text-sm font-mono text-white font-bold">Behavior Badges</span>
+          </div>
+          <div className="text-xs text-gray-400 space-y-1">
+            <p>• <span className="text-blue-400">Unpredictable</span> - No temporal patterns</p>
+            <p>• <span className="text-cyan-400">Minimalist</span> - Few, focused interactions</p>
+            <p>• <span className="text-yellow-400">Social Butterfly</span> - Many unique interactions (privacy risk!)</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Your Status */}
+      <div className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-xl p-4 border border-blue-500/30">
+        <h3 className="text-sm font-mono text-blue-400 font-bold mb-3">Your Current Status</h3>
+        <div className="flex flex-wrap gap-2">
+          {earnedBadges.map((badge) => (
             <div
               key={badge.id}
-              className="group relative p-2 rounded-lg bg-black/40 border border-gray-700 opacity-50 hover:opacity-80 transition-opacity cursor-help"
+              className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-lg border ${rarityBorders[badge.rarity]} bg-black/40`}
+              title={badge.description}
             >
-              <div className="text-center">
-                <span className="text-lg grayscale">{badge.emoji}</span>
-              </div>
-              
-              {/* Tooltip */}
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-40 p-2 bg-black/95 rounded-lg border border-gray-700 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
-                <p className="text-xs text-white font-bold">{badge.name}</p>
-                <p className="text-xs text-gray-400 mt-1">{badge.description}</p>
-                <p className="text-xs text-yellow-400 mt-1 font-mono">🔓 {badge.condition}</p>
-              </div>
+              <span>{badge.emoji}</span>
+              <span className="text-xs font-mono text-white">{badge.name}</span>
             </div>
           ))}
+          {earnedBadges.length === 0 && (
+            <p className="text-xs text-gray-500">No badges earned yet. Improve your privacy to unlock badges!</p>
+          )}
         </div>
       </div>
-
-      {/* Featured Badge */}
-      {earnedBadges.length > 0 && (
-        <div className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-xl p-4 border border-blue-500/30">
-          <div className="flex items-center gap-4">
-            <div className="text-4xl">
-              {earnedBadges.find(b => b.rarity === 'legendary')?.emoji ||
-               earnedBadges.find(b => b.rarity === 'epic')?.emoji ||
-               earnedBadges[0].emoji}
-            </div>
-            <div>
-              <div className="text-sm font-mono text-white font-bold">
-                {earnedBadges.find(b => b.rarity === 'legendary')?.name ||
-                 earnedBadges.find(b => b.rarity === 'epic')?.name ||
-                 earnedBadges[0].name}
-              </div>
-              <div className="text-xs text-gray-400">
-                {earnedBadges.find(b => b.rarity === 'legendary')?.description ||
-                 earnedBadges.find(b => b.rarity === 'epic')?.description ||
-                 earnedBadges[0].description}
-              </div>
-              <div className="text-xs text-blue-400 mt-1 font-mono">
-                Featured Achievement
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </motion.div>
   );
 }

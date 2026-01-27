@@ -46,15 +46,6 @@ interface SimulationOption {
 
 const SIMULATION_OPTIONS: SimulationOption[] = [
   {
-    id: "shadowwire",
-    name: "Use ShadowWire",
-    description: "Route future transactions through ShadowWire's private transfer protocol",
-    icon: <Shield className="h-4 w-4" />,
-    impact: 25,
-    riskReduction: "Breaks direct transaction links with zero-knowledge proofs",
-    implementation: "All future transfers routed through ShadowWire relayer network",
-  },
-  {
     id: "timing-randomization",
     name: "Randomize Timing",
     description: "Eliminate temporal patterns by randomizing transaction times",
@@ -329,15 +320,14 @@ export function SimulationPanel({ analysis, onSimulationChange }: SimulationPane
                 })}
               </div>
 
-              {/* Apply Button */}
+              {/* Simulation Info */}
               {activeSimulations.size > 0 && (
-                <Button
-                  onClick={() => onSimulationChange?.(getSimulationResult())}
-                  className="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-mono"
-                >
-                  <Zap className="h-4 w-4 mr-2" />
-                  Apply Simulation ({activeSimulations.size} techniques)
-                </Button>
+                <div className="bg-cyan-500/10 border border-cyan-500/30 rounded-lg p-3 text-center">
+                  <p className="text-xs text-cyan-400 font-mono">
+                    💡 This is a preview of potential privacy improvements.
+                    Implement these techniques manually to achieve the simulated score.
+                  </p>
+                </div>
               )}
             </div>
           </motion.div>

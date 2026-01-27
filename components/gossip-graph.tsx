@@ -55,12 +55,15 @@ function detectAddressType(address: string): "wallet" | "exchange" | "program" {
 function convertAnalysisToReactFlow(
   address: string, 
   paths: DeanonymizationPath[],
-  mevExposure?: { detected: boolean; count: number; totalExtracted: number }
+  mevExposure?: { detected: boolean; count: number; totalExtracted: number },
+  privacyScore?: number,
+  totalTransactions?: number
 ) {
   const nodeMap = new Map<string, { 
     type: "wallet" | "exchange" | "program" | "mev"; 
     risk: string;
     confidence?: number;
+    transactionCount?: number;
     mevExposure?: { detected: boolean; count: number; totalExtracted: number };
     attackType?: string;
     profit?: number;
@@ -72,7 +75,8 @@ function convertAnalysisToReactFlow(
   nodeMap.set(address, { 
     type: "wallet", 
     risk: "medium",
-    mevExposure
+    mevExposure,
+    transactionCount: totalTransactions
   });
 
   // If MEV exposure detected, add MEV bot node
@@ -103,8 +107,15 @@ function convertAnalysisToReactFlow(
         const detectedType = detectAddressType(node.address);
         nodeMap.set(node.address, { 
           type: node.type === "wallet" ? detectedType : node.type, 
-          risk: node.risk 
+          risk: node.risk,
+          transactionCount: node.transactionCount
         });
+      } else {
+        // Update existing node with transactionCount if not set
+        const existing = nodeMap.get(node.address)!;
+        if (!existing.transactionCount && node.transactionCount) {
+          existing.transactionCount = node.transactionCount;
+        }
       }
     });
     path.edges.forEach((edge) => {
@@ -138,10 +149,11 @@ function convertAnalysisToReactFlow(
         address: nodeAddress,
         label: isMev ? "MEV Bot" : `${nodeAddress.slice(0, 4)}...${nodeAddress.slice(-4)}`,
         type: data.type,
-        riskLevel: data.risk,
+        riskLevel: data.confidence > 80 ? "high" : data.confidence > 50 ? "medium" : "low",
         isMain,
         confidence: data.confidence,
-        privacyScore: isMain ? 50 : undefined,
+        transactionCount: data.transactionCount,
+        privacyScore: isMain ? privacyScore : undefined,
         mevExposure: data.mevExposure,
         attackType: data.attackType,
         profit: data.profit,
@@ -180,7 +192,13 @@ export function GossipGraph({ address, analysis }: GossipGraphProps) {
   console.log("🔍 GossipGraph received:", { pathCount: analysis?.deanonymizationPaths?.length ?? 0 });
 
   const { nodes: initialNodes, edges: initialEdges } = useMemo(
-    () => convertAnalysisToReactFlow(address, analysis?.deanonymizationPaths ?? [], analysis?.mevExposure),
+    () => convertAnalysisToReactFlow(
+      address, 
+      analysis?.deanonymizationPaths ?? [], 
+      analysis?.mevExposure, 
+      analysis?.privacyScore,
+      analysis?.transactionCount
+    ),
     [address, analysis]
   );
 
@@ -215,6 +233,7 @@ export function GossipGraph({ address, analysis }: GossipGraphProps) {
       riskLevel: node.data.riskLevel as "low" | "medium" | "high" | "critical",
       isMain: node.data.isMain,
       confidence: node.data.confidence,
+      transactionCount: node.data.transactionCount,
     });
     setModalOpen(true);
   }, []);
@@ -246,8 +265,9 @@ export function GossipGraph({ address, analysis }: GossipGraphProps) {
         </Panel>
 
         <Panel position="top-center">
-          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1 }} className="bg-black/60 backdrop-blur-sm border border-blue-500/20 rounded-lg px-3 py-1.5">
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1 }} className="bg-black/60 backdrop-blur-sm border border-blue-500/20 rounded-lg px-3 py-1.5 text-center">
             <span className="text-xs text-gray-400 font-mono">💡 Click any node for details</span>
+            <div className="text-[10px] text-gray-500 font-mono mt-0.5">Top 12 connections shown • All addresses analyzed for scoring</div>
           </motion.div>
         </Panel>
 
@@ -258,11 +278,16 @@ export function GossipGraph({ address, analysis }: GossipGraphProps) {
             <div className="flex items-center gap-2"><div className="h-3 w-3 rounded-full bg-orange-500"></div><span className="text-xs text-gray-400 font-mono">Exchange</span></div>
             <div className="flex items-center gap-2"><div className="h-3 w-3 rounded-full bg-purple-500"></div><span className="text-xs text-gray-400 font-mono">Program</span></div>
             <div className="flex items-center gap-2"><div className="h-3 w-3 rounded-full bg-red-500"></div><span className="text-xs text-gray-400 font-mono">MEV Bot</span></div>
-            <div className="flex items-center gap-2"><div className="h-3 w-3 rounded-full bg-cyan-500"></div><span className="text-xs text-gray-400 font-mono">Stealth</span></div>
             <div className="border-t border-blue-500/20 my-2"></div>
-            <div className="flex items-center gap-2"><div className="h-0.5 w-6 bg-green-500"></div><span className="text-xs text-gray-400 font-mono">Low Risk</span></div>
-            <div className="flex items-center gap-2"><div className="h-0.5 w-6 bg-yellow-500"></div><span className="text-xs text-gray-400 font-mono">Medium Risk</span></div>
-            <div className="flex items-center gap-2"><div className="h-0.5 w-6 bg-red-500"></div><span className="text-xs text-gray-400 font-mono">High Risk</span></div>
+            <div className="flex items-center gap-2"><div className="h-0.5 w-6 bg-green-500"></div><span className="text-xs text-gray-400 font-mono">Low Risk (&lt;50%)</span></div>
+            <div className="flex items-center gap-2"><div className="h-0.5 w-6 bg-yellow-500"></div><span className="text-xs text-gray-400 font-mono">Medium Risk (50-80%)</span></div>
+            <div className="flex items-center gap-2"><div className="h-0.5 w-6 bg-red-500"></div><span className="text-xs text-gray-400 font-mono">High Risk (&gt;80%)</span></div>
+            <div className="border-t border-blue-500/20 my-2"></div>
+            <div className="text-xs font-mono text-gray-500">
+              <span className="text-blue-400">Edge %</span> = Confidence score<br/>
+              How certain we are that this<br/>
+              connection can deanonymize you
+            </div>
           </div>
         </Panel>
 
